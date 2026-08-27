@@ -1,0 +1,43 @@
+# Gradle & Build artifacts
+*.iml
+.gradle/
+build/
+**/build/
+.kotlin/
+/local.properties
+local.properties
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+
+# IDE & Editor files
+.idea/
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.vscode/
+.cursor/
+.agents/
+.windsurfrules
+.nex/
+.kombai/
+.codelens/
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+debug.keystore
+
+# OS & Logs
+.DS_Store
+Thumbs.db
+*.log
+logs/

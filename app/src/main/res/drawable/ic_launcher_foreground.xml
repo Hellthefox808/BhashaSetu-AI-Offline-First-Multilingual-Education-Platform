@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Golden Bridge Arch connecting Mother-Tongue & Classroom -->
+    <path
+        android:pathData="M32,70 C40,52 68,52 76,70 C72,71 66,60 54,60 C42,60 36,71 32,70 Z"
+        android:fillColor="#FFCA28" />
+    
+    <!-- Open Book / Wings of Education -->
+    <path
+        android:pathData="M54,48 L54,66 C50,63 42,62 34,65 L34,47 C42,44 50,45 54,48 Z"
+        android:fillColor="#FFFFFF" />
+    <path
+        android:pathData="M54,48 L54,66 C58,63 66,62 74,65 L74,47 C66,44 58,45 54,48 Z"
+        android:fillColor="#E0F2F1" />
+    
+    <!-- Voice Sound Wave Spark (representing Voice-to-Voice AI translation) -->
+    <path
+        android:pathData="M54,28 L56,36 L64,38 L56,40 L54,48 L52,40 L44,38 L52,36 Z"
+        android:fillColor="#FF7043" />
+    
+    <!-- Speech ripple waves -->
+    <path
+        android:pathData="M68,34 C72,37 74,42 74,47"
+        android:strokeWidth="2.5"
+        android:strokeColor="#FFCA28"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <path
+        android:pathData="M73,29 C79,34 82,41 82,48"
+        android:strokeWidth="2.5"
+        android:strokeColor="#80DEEA"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    
+    <!-- Left ripple wave -->
+    <path
+        android:pathData="M40,34 C36,37 34,42 34,47"
+        android:strokeWidth="2.5"
+        android:strokeColor="#FFCA28"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+</vector>

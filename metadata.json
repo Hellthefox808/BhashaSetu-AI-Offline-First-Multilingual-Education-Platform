@@ -1,0 +1,6 @@
+{
+  "name": "BhashaSetu AI",
+  "description": "Mother-Tongue Multilingual Education platform connecting Hindi teachers to Santhali, Ho, and Mundari with offline-first curriculum RAG, live voice translation, and pedagogical adaptation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

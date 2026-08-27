@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BhashaSetu AI</string>
+    <string name="tagline">Mother-Tongue Education Bridge</string>
+    <string name="select_language">Select Target Language</string>
+    <string name="santhali">Santhali (ᱥᱟᱱᱛᱟᱲᱤ)</string>
+    <string name="ho">Ho (ᱦᱳ)</string>
+    <string name="mundari">Mundari (मुण्डारी)</string>
+    <string name="hindi">Hindi (हिन्दी)</string>
+</resources>
