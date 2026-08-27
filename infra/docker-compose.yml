@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: bhashasetu-postgres
+    environment:
+      POSTGRES_USER: bhashasetu_user
+      POSTGRES_PASSWORD: bhashasetu_password
+      POSTGRES_DB: bhashasetu_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bhashasetu_user -d bhashasetu_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: bhashasetu-redis
+    ports:
+      - "6379:6379"
+
+  ai-platform:
+    build:
+      context: ../services/ai-platform
+      dockerfile: Dockerfile
+    container_name: bhashasetu-ai-platform
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+
+  web-backend:
+    build:
+      context: ../services/web-backend
+      dockerfile: Dockerfile
+    container_name: bhashasetu-web-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DATABASE_URL=postgresql://bhashasetu_user:bhashasetu_password@postgres:5432/bhashasetu_db
+      - REDIS_URL=redis://redis:6379
+      - AI_SERVICE_URL=http://ai-platform:8000
+    depends_on:
+      - postgres
+      - redis
+      - ai-platform
+
+  web-frontend:
+    build:
+      context: ../apps/web-frontend
+      dockerfile: Dockerfile
+    container_name: bhashasetu-web-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1
+    depends_on:
+      - web-backend
+
+volumes:
+  pgdata:
