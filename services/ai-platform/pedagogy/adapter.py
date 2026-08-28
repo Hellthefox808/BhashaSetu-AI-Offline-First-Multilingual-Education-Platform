@@ -3,7 +3,7 @@ BhashaSetu AI — Pedagogical Adaptation Engine
 Injects culturally situated tribal analogies (Sarhul, Sohrai, Karam) while preserving learning outcomes.
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 CULTURAL_ANALOGIES = {
     "TREES_AND_LEAVES": {
@@ -27,18 +27,30 @@ class PedagogicalAdapter:
     """Adapts standard textbook concepts into localized, grade-appropriate primary pedagogy."""
 
     @staticmethod
-    def adapt(hindi_prompt: str, grade: str, target_language: str, evidence_chunks: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def adapt(
+        hindi_prompt: Optional[str] = None,
+        grade: Optional[str] = None,
+        target_language: str = "SANTHALI",
+        evidence_chunks: Optional[List[Dict[str, Any]]] = None,
+        concept_title: Optional[str] = None,
+        grade_level: Optional[str] = None,
+        rag_evidence: Optional[List[Dict[str, Any]]] = None
+    ) -> Dict[str, Any]:
+        prompt = hindi_prompt or concept_title or "पेड़ और पत्तियाँ"
+        grd = grade or grade_level or "GRADE_2"
+        evidence = evidence_chunks or rag_evidence or []
+
         # Identify matching analogy theme
         theme = "TREES_AND_LEAVES"
-        if "गिन" in hindi_prompt or "संख्या" in hindi_prompt or "जोड़" in hindi_prompt:
+        if "गिन" in prompt or "संख्या" in prompt or "जोड़" in prompt:
             theme = "COUNTING_MATH"
-        elif "जल" in hindi_prompt or "पानी" in hindi_prompt or "नदी" in hindi_prompt:
+        elif "जल" in prompt or "पानी" in prompt or "नदी" in prompt:
             theme = "WATER_CONSERVATION"
             
         analogy_data = CULTURAL_ANALOGIES[theme]
         
         return {
-            "grade_level": grade,
+            "grade_level": grd,
             "target_language": target_language,
             "cultural_analogy": analogy_data["analogy"],
             "local_story_context": analogy_data["story_context"],

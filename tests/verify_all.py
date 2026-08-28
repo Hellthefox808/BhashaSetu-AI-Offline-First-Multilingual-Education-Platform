@@ -245,6 +245,15 @@ class TestBhashaSetuComprehensive(unittest.TestCase):
             self.assertTrue(os.path.isfile(os.path.join(k8s_dir, kf)), f"K8s manifest {kf} missing!")
         print("[PASS] Test 12: Production Docker Compose mesh & 11 Kubernetes manifests verified.")
 
+    def test_13_unified_synthesis_pipeline(self):
+        """Assert the unified 7-stage educational synthesis pipeline produces complete valid bundles."""
+        from pipeline import unified_pipeline
+        res = unified_pipeline.execute_full_pipeline("पेड़ों की पत्तियाँ", target_language="SANTHALI")
+        self.assertEqual(res["status"], "SUCCESS")
+        self.assertEqual(res["script_type"], "OL_CHIKI")
+        self.assertIn("pipeline_timings", res)
+        print(f"[PASS] Test 13: Master 7-stage synthesis pipeline verified ({res['pipeline_timings']['total_pipeline_ms']}ms latency).")
+
 if __name__ == "__main__":
     print("\n=======================================================")
     print("  BHASHASETU AI -- COMPREHENSIVE END-TO-END SUITE")

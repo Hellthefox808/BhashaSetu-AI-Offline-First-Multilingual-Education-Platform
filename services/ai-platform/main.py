@@ -1,6 +1,6 @@
 """
 BhashaSetu AI Platform Microservice (FastAPI + Python 3.12)
-Comprehensive inference gateway for Hybrid RAG, Multilingual MT, Live Voice Translation, Offline Packs, and Quality Gates.
+Comprehensive inference gateway for Hybrid RAG, Multilingual MT, Live Voice Translation, Offline Packs, Quality Gates, and Unified Synthesis Pipeline.
 Version: 3.0.0-PROD | SIH26042
 """
 
@@ -17,6 +17,7 @@ from translation.providers import language_provider
 from pedagogy.adapter import pedagogical_adapter
 from quality.evaluator import quality_evaluator
 from voice.service import voice_pipeline
+from pipeline import unified_pipeline
 
 app = FastAPI(
     title="BhashaSetu AI Platform API",
@@ -67,6 +68,13 @@ class PedagogyAdaptRequest(BaseModel):
 class OfflinePackGenerateRequest(BaseModel):
     target_language: str = "SANTHALI"
     grades: List[str] = ["GRADE_1", "GRADE_2", "GRADE_3", "GRADE_4", "GRADE_5"]
+
+class PipelineSynthesizeRequest(BaseModel):
+    hindi_prompt: str = Field(..., example="पेड़ों की पत्तियाँ और उनके कार्य")
+    target_language: str = Field(default="SANTHALI", example="SANTHALI")
+    grade_level: str = Field(default="GRADE_2", example="GRADE_2")
+    subject: str = Field(default="ENVIRONMENTAL_STUDIES", example="ENVIRONMENTAL_STUDIES")
+    district: Optional[str] = Field(default="Dumka", example="Dumka")
 
 # --- API Endpoints ---
 @app.get("/health")
@@ -257,6 +265,17 @@ def generate_offline_package(req: OfflinePackGenerateRequest):
         "download_url": f"/packages/offline/{req.target_language.lower()}_bundle.zip",
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     }
+
+@app.post("/api/v1/pipeline/synthesize")
+def synthesize_full_pipeline(req: PipelineSynthesizeRequest):
+    """Executes the master 7-stage MTB-MLE educational synthesis pipeline."""
+    return unified_pipeline.execute_full_pipeline(
+        hindi_prompt=req.hindi_prompt,
+        target_language=req.target_language,
+        grade_level=req.grade_level,
+        subject=req.subject,
+        district=req.district
+    )
 
 @app.get("/api/v1/telemetry/latency")
 def get_latency_telemetry():
