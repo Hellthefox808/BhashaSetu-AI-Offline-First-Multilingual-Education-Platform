@@ -60,14 +60,14 @@
 
 ### 🎖️ Team Structure & Roles (6 Members)
 
-| # | Role & Designation | Team Member | Primary Core Responsibilities |
-|:---:|---|---|---|
-| **01** | **Team Lead & Solution Architect** | **Ravi Ranjan Singh** | • Overall Problem + Solution Ownership<br/>• Full-Stack System Architecture & Polyglot Monorepo Design<br/>• Task Allocation & Final Technical Decisions<br/>• SIH Submission & Final Jury Presentation Lead |
-| **02** | **Full-Stack Developer** | **Rohit Sbu** & **Ravi Ranjan Singh** | • NestJS 11 Gateway & Domain Core Modules<br/>• PostgreSQL 18 + pgvector / DiskANN & Redis BullMQ<br/>• OpenAPI 3.1 REST Endpoints & Authentication (Argon2id/JWT)<br/>• Business Logic Integration & Docker Deployment |
-| **03** | **Frontend & UX Engineer** | **Anushka** *(NCC 2nd Batch SBU)* | • Next.js 16.3 + React 19.2 Lesson Studio Canvas<br/>• Responsive UI & Multi-Device Breakpoint Handling<br/>• Real-Time Voice Visualizer & TanStack Query v5 Caching<br/>• Accessible UI Polish (Radix UI / Tailwind CSS v4) |
-| **04** | **AI & Data Engineer** | **Abhishek** *(NCC SBU)* | • Hybrid RAG Retrieval Engine (BM25 + Semantic Centroids)<br/>• Multilingual MT Pipeline (Santhali, Ho, Mundari Lexicons)<br/>• Unbabel COMET Quality Scoring & MQM Error Span Tagger<br/>• Low-Latency Voice-to-Voice Streaming Optimization |
-| **05** | **Product & UI/UX Lead** | **Arya Hans** *(2nd Batch NCC SBU)* | • Teacher & Student Classroom Journey Mapping<br/>• High-Fidelity UI/UX & Native Script Typography Design<br/>• Unified Design System & Visual Asset Creation<br/>• Interactive Product Experience & Live Demo Storyboarding |
-| **06** | **Research, Impact & Documentation Lead** | **Aniket** *(SBU DS CC)* | • Tribal Primary Education Field Research & Problem Framing<br/>• Jharkhand District Impact Analysis (Dumka, Pakur, Khunti)<br/>• Living Master Documentation Suite (PRD, TAD, SAD, FSD, FTL)<br/>• Pitch Deck (PPT) & Presentation Narrative |
+| # | Role & Designation | Team Member | Institutional Affiliation | Primary Core Responsibilities |
+|:---:|---|---|---|---|
+| **01** | **Team Lead & Solution Architect** | **Ravi Ranjan Singh** | *Sarala Birla University (SBU)* | • Overall Problem + Solution Ownership<br/>• Full-Stack System Architecture & Polyglot Monorepo Design<br/>• Task Allocation & Technical Decisions<br/>• SIH Submission & Final Jury Presentation |
+| **02** | **Full-Stack Developer** | **Rohit Kumar** & **Ravi Ranjan Singh** | *Sarala Birla University (SBU)* | • NestJS 11 Gateway & Domain Core Modules<br/>• PostgreSQL 18 + pgvector / DiskANN & Redis BullMQ<br/>• OpenAPI 3.1 REST Endpoints & Authentication (Argon2id/JWT)<br/>• Business Logic Integration & Docker Deployment |
+| **03** | **Frontend & UX Engineer** | **Anushka Kumari** | *Sarala Birla University (SBU)* | • Next.js 16.3 + React 19.2 Lesson Studio Canvas<br/>• Responsive UI & Multi-Device Breakpoint Handling<br/>• Real-Time Voice Visualizer & TanStack Query v5 Caching<br/>• Accessible UI Polish (Radix UI / Tailwind CSS v4) |
+| **04** | **AI & Data Engineer** | **Abhishek Kumar** | *Sarala Birla University (SBU)* | • Hybrid RAG Retrieval Engine (BM25 + Semantic Centroids)<br/>• Multilingual MT Pipeline (Santhali, Ho, Mundari Lexicons)<br/>• Unbabel COMET Quality Scoring & MQM Error Span Tagger<br/>• Low-Latency Voice-to-Voice Streaming Optimization |
+| **05** | **Product & UI/UX Lead** | **Arya Hans** | *Sarala Birla University (SBU)* | • Teacher & Student Classroom Journey Mapping<br/>• High-Fidelity UI/UX & Native Script Typography Design<br/>• Unified Design System & Visual Asset Creation<br/>• Interactive Product Experience & Live Demo Storyboarding |
+| **06** | **Research, Impact & Documentation Lead** | **Aniket Kumar** | *Sarala Birla University (SBU)* | • Tribal Primary Education Field Research & Problem Framing<br/>• Jharkhand District Impact Analysis (Dumka, Pakur, Khunti)<br/>• Living Master Documentation Suite (PRD, TAD, SAD, FSD, FTL)<br/>• Pitch Deck (PPT) & Presentation Narrative |
 
 ---
 
