@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![Team SHIVI@808](https://img.shields.io/badge/Team-SHIVI%40808-orange.svg?style=for-the-badge&logo=github)](https://github.com/Hellthefox808)
 [![SIH 2026](https://img.shields.io/badge/SIH%202026-Problem%20SIH26042-blue.svg?style=for-the-badge&logo=gov.in)](https://smartindiahackathon.gov.in)
 [![Production Ready](https://img.shields.io/badge/Status-3.0.0--PROD%20Verified-brightgreen.svg?style=for-the-badge)](docs/FTL.md)
 [![TypeScript Strict](https://img.shields.io/badge/TypeScript-5.x%20Strict-blue.svg?style=for-the-badge&logo=typescript)](packages/contracts)
@@ -12,6 +13,9 @@
 [![Tests Passing](https://img.shields.io/badge/Tests-11%2F11%20Passing%20(100%25)-success.svg?style=for-the-badge)](tests/verify_all.py)
 
 **Mother-Tongue-Based Multilingual Education (MTB-MLE) AI Scaffolding, Live Voice Translation, Edge RAG, and Offline Field Synchronization for Primary Schools in Jharkhand.**
+
+### Developed by **Team SHIVI@808** for **National Skill India Hackathon (SIH 2026)**
+*SHIVI = Smart Hybrid Intelligence & Virtual Integration*
 
 [Architecture Overview](docs/ARCHITECTURE_OVERVIEW.md) • [Product Requirements (PRD)](docs/PRD.md) • [Technical Architecture (TAD)](docs/TAD.md) • [Software Architecture (SAD)](docs/SAD.md) • [Functional Spec (FSD)](docs/FSD.md) • [Traceability Ledger (FTL)](docs/FTL.md)
 
@@ -25,23 +29,68 @@
 ---
 
 ## 📑 Table of Contents
-1. [Executive Summary & Educational Context](#-executive-summary--educational-context)
-2. [Target Languages & Script Unicode Matrix](#-target-languages--script-unicode-matrix)
-3. [Master Full-Stack Architecture](#-master-full-stack-architecture)
-4. [Subsystems Deep Dive](#-subsystems-deep-dive)
+1. [Team SHIVI@808 Structure & Ownership](#-team-shivi808--national-skill-india-hackathon)
+2. [Executive Summary & Educational Context](#-executive-summary--educational-context)
+3. [Target Languages & Script Unicode Matrix](#-target-languages--script-unicode-matrix)
+4. [Master Full-Stack Architecture](#-master-full-stack-architecture)
+5. [Subsystems Deep Dive](#-subsystems-deep-dive)
    - [A. Web Frontend (`apps/web-frontend`)](#a-web-frontend-appsweb-frontend)
    - [B. Android Edge Client (`app/` / `apps/mobile`)](#b-android-edge-client-app--appsmobile)
    - [C. Enterprise Gateway Core (`services/web-backend`)](#c-enterprise-gateway-core-servicesweb-backend)
    - [D. AI / ML Microservice (`services/ai-platform`)](#d-ai--ml-microservice-servicesai-platform)
    - [E. Shared Contracts (`packages/contracts`)](#e-shared-contracts-packagescontracts)
-5. [Business Logic & Pedagogical Invariants](#-business-logic--pedagogical-invariants)
-6. [Hybrid RAG Retrieval Engine](#-hybrid-rag-retrieval-engine)
-7. [Live Voice-to-Voice Latency Budget](#-live-voice-to-voice-latency-budget)
-8. [Offline-First Local Storage & Durable Outbox Sync](#-offline-first-local-storage--durable-outbox-sync)
-9. [Automated Verification & Benchmark Proofs](#-automated-verification--benchmark-proofs)
-10. [Living Master Documentation Suite](#-living-documentation-suite)
-11. [Quickstart & Deployment Guide](#-quickstart--deployment-guide)
-12. [Security, Governance & Data Sovereignty](#-security-governance--data-sovereignty)
+6. [Business Logic & Pedagogical Invariants](#-business-logic--pedagogical-invariants)
+7. [Hybrid RAG Retrieval Engine](#-hybrid-rag-retrieval-engine)
+8. [Live Voice-to-Voice Latency Budget](#-live-voice-to-voice-latency-budget)
+9. [Offline-First Local Storage & Durable Outbox Sync](#-offline-first-local-storage--durable-outbox-sync)
+10. [Automated Verification & Benchmark Proofs](#-automated-verification--benchmark-proofs)
+11. [Living Master Documentation Suite](#-living-master-documentation-suite)
+12. [Quickstart & Deployment Guide](#-quickstart--deployment-guide)
+13. [Security, Governance & Data Sovereignty](#-security-governance--data-sovereignty)
+
+---
+
+## 👥 Team SHIVI@808 — National Skill India Hackathon
+
+<div align="center">
+  <h3><b>SHIVI</b> = <i>Smart Hybrid Intelligence & Virtual Integration</i></h3>
+  <p><b>Core Principle:</b> <i>1 Problem → 1 Solution → 3 Core Builders → 1 Product Experience → 1 Impact Story → 1 Working Prototype → 1 Strong Demo</i></p>
+  <p><b>Motto:</b> <code>SHIVI@808 — Build Fast. Integrate Smart. Present Strong.</code></p>
+</div>
+
+### 🎖️ Team Structure & Roles (6 Members)
+
+| # | Role & Designation | Team Member | Primary Core Responsibilities |
+|:---:|---|---|---|
+| **01** | **Team Lead & Solution Architect** | **Ravi Ranjan Singh** | • Overall Problem + Solution Ownership<br/>• Full-Stack System Architecture & Polyglot Monorepo Design<br/>• Task Allocation & Final Technical Decisions<br/>• SIH Submission & Final Jury Presentation Lead |
+| **02** | **Full-Stack Developer** | **Rohit Sbu** & **Ravi Ranjan Singh** | • NestJS 11 Gateway & Domain Core Modules<br/>• PostgreSQL 18 + pgvector / DiskANN & Redis BullMQ<br/>• OpenAPI 3.1 REST Endpoints & Authentication (Argon2id/JWT)<br/>• Business Logic Integration & Docker Deployment |
+| **03** | **Frontend & UX Engineer** | **Anushka** *(NCC 2nd Batch SBU)* | • Next.js 16.3 + React 19.2 Lesson Studio Canvas<br/>• Responsive UI & Multi-Device Breakpoint Handling<br/>• Real-Time Voice Visualizer & TanStack Query v5 Caching<br/>• Accessible UI Polish (Radix UI / Tailwind CSS v4) |
+| **04** | **AI & Data Engineer** | **Abhishek** *(NCC SBU)* | • Hybrid RAG Retrieval Engine (BM25 + Semantic Centroids)<br/>• Multilingual MT Pipeline (Santhali, Ho, Mundari Lexicons)<br/>• Unbabel COMET Quality Scoring & MQM Error Span Tagger<br/>• Low-Latency Voice-to-Voice Streaming Optimization |
+| **05** | **Product & UI/UX Lead** | **Arya Hans** *(2nd Batch NCC SBU)* | • Teacher & Student Classroom Journey Mapping<br/>• High-Fidelity UI/UX & Native Script Typography Design<br/>• Unified Design System & Visual Asset Creation<br/>• Interactive Product Experience & Live Demo Storyboarding |
+| **06** | **Research, Impact & Documentation Lead** | **Aniket** *(SBU DS CC)* | • Tribal Primary Education Field Research & Problem Framing<br/>• Jharkhand District Impact Analysis (Dumka, Pakur, Khunti)<br/>• Living Master Documentation Suite (PRD, TAD, SAD, FSD, FTL)<br/>• Pitch Deck (PPT) & Presentation Narrative |
+
+---
+
+### ⚙️ Working Model & Functional Pods
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│                          TEAM LEAD (Solution Architect)                │
+│                        TL-RAVI RANJAN SINGH                            │
+└──────────────────────────────────┬─────────────────────────────────────┘
+                                   │
+         ┌─────────────────────────┼─────────────────────────┐
+         ▼                         ▼                         ▼
+┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐
+│ 01 — SHIVI CORE  │      │ 02 — SHIVI BUILD │      │03—PRODUCT & PITCH│
+│  Decision-Making │      │  Engineering & AI│      │ UX & Presentation│
+│  Milestones      │      │  APIs, DB, RAG   │      │ PPT, Research    │
+│  Final Submission│      │  GitHub & Deploy │      │ Demo Visuals     │
+└──────────────────┘      └──────────────────┘      └──────────────────┘
+```
+
+- **Integrated AI Philosophy:** AI is seamlessly woven into the core product workflows (Lesson Studio, Practice Quizzes, Voice Streaming), never treated as an isolated silo.
+- **Clear Ownership Matrix:** Every major technical deliverable has **1 Primary Owner + 1 Backup Owner + 1 Strict Deadline**.
 
 ---
 
@@ -377,7 +426,7 @@ OK
 
 ---
 
-## 📑 Living Documentation Suite
+## 📑 Living Master Documentation Suite
 
 All system documentation is synchronized in the [`docs/`](docs/) directory:
 
@@ -463,4 +512,6 @@ npm run dev
 
 ## 📄 License & Attribution
 Developed for educational equity in multilingual primary education under the **MIT License**.  
-Sponsored & Submitted under **Smart India Hackathon (SIH 2026) — Problem Statement SIH26042**.
+**Team SHIVI@808 — National Skill India Hackathon (SIH 2026)**  
+*Problem Statement:* **SIH26042 (Mother-Tongue-Based Multilingual Education)**  
+*Team Lead & Solution Architect:* **Ravi Ranjan Singh** (`TL-RAVI RANJAN SINGH`)
