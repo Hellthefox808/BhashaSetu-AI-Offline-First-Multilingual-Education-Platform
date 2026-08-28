@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bhashasetu-config
+  namespace: bhashasetu-prod
+  labels:
+    app.kubernetes.io/name: bhashasetu-ai
+data:
+  NODE_ENV: "production"
+  PORT_BACKEND: "3001"
+  PORT_FRONTEND: "3000"
+  PORT_AI: "8000"
+  AI_SERVICE_URL: "http://ai-platform-service:8000"
+  REDIS_URL: "redis://redis-service:6379"
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "bhashasetu_db"
+  LOG_LEVEL: "info"
+  RAG_EMBEDDING_MODEL: "BAAI/bge-m3"

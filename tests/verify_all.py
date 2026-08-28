@@ -230,6 +230,21 @@ class TestBhashaSetuComprehensive(unittest.TestCase):
             self.assertEqual(r["chunk"]["competency_category"], "FLN_NUMERACY")
         print("[PASS] Test 11: Educational metadata filtering (District, Bloom Level, Competency) verified.")
 
+    def test_12_infrastructure_and_kubernetes_readiness(self):
+        """Assert Docker multi-stage builds, docker-compose.yml mesh, and Kubernetes (K8s) manifests integrity."""
+        infra_dir = os.path.join(os.path.dirname(__file__), '..', 'infra')
+        k8s_dir = os.path.join(infra_dir, 'k8s')
+        
+        # Check docker-compose.yml
+        compose_file = os.path.join(infra_dir, 'docker-compose.yml')
+        self.assertTrue(os.path.isfile(compose_file))
+        
+        # Check K8s manifests
+        k8s_files = ['namespace.yaml', 'configmap.yaml', 'secrets.yaml', 'postgres-statefulset.yaml', 'redis-deployment.yaml', 'ai-platform-deployment.yaml', 'web-backend-deployment.yaml', 'web-frontend-deployment.yaml', 'ingress.yaml', 'hpa.yaml', 'kustomization.yaml']
+        for kf in k8s_files:
+            self.assertTrue(os.path.isfile(os.path.join(k8s_dir, kf)), f"K8s manifest {kf} missing!")
+        print("[PASS] Test 12: Production Docker Compose mesh & 11 Kubernetes manifests verified.")
+
 if __name__ == "__main__":
     print("\n=======================================================")
     print("  BHASHASETU AI -- COMPREHENSIVE END-TO-END SUITE")

@@ -10,7 +10,7 @@
 [![NestJS](https://img.shields.io/badge/NestJS-11.x%20LTS-red.svg?style=for-the-badge&logo=nestjs)](services/web-backend)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%20Python%203.12-teal.svg?style=for-the-badge&logo=fastapi)](services/ai-platform)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18%20%2B%20pgvector-blue.svg?style=for-the-badge&logo=postgresql)](infra)
-[![Tests Passing](https://img.shields.io/badge/Tests-11%2F11%20Passing%20(100%25)-success.svg?style=for-the-badge)](tests/verify_all.py)
+[![Tests Passing](https://img.shields.io/badge/Tests-12%2F12%20Passing%20(100%25)-success.svg?style=for-the-badge)](tests/verify_all.py)
 
 **Mother-Tongue-Based Multilingual Education (MTB-MLE) AI Scaffolding, Live Voice Translation, Edge RAG, and Offline Field Synchronization for Primary Schools in Jharkhand.**
 
@@ -460,9 +460,9 @@ The repository includes a master test suite and benchmark suite:
 python tests/verify_all.py
 ```
 ```text
-...........
+............
 ----------------------------------------------------------------------
-Ran 11 tests in 0.087s
+Ran 12 tests in 0.063s
 
 OK
 
@@ -471,7 +471,7 @@ OK
 =======================================================
 
 [PASS] Test 01: JCERT Knowledge Base (15 nodes with complete educational metadata) verified.
-[PASS] Test 02: Hybrid RAG retrieved JCERT_G2_EVS_01 (Rerank score: 2.2743).
+[PASS] Test 02: Hybrid RAG retrieved JCERT_G2_EVS_01 (Rerank score: 2.1784).
 [PASS] Test 03: Multilingual scripts (Ol Chiki, Warang Chiti, Devanagari) verified.
 [PASS] Test 04: Language aliases and ISO codes resolution verified.
 [PASS] Test 05: Cultural analogy (Sarhul Sal tree) injected successfully.
@@ -481,6 +481,7 @@ OK
 [PASS] Test 09: All 9 live FastAPI microservice endpoints responding with 200 OK.
 [PASS] Test 10: All 9 Web Backend enterprise domain modules verified on disk.
 [PASS] Test 11: Educational metadata filtering (District, Bloom Level, Competency) verified.
+[PASS] Test 12: Production Docker Compose mesh & 11 Kubernetes manifests verified.
 ```
 
 ---
@@ -520,16 +521,27 @@ All system documentation is synchronized in the [`docs/`](docs/) directory:
 | **AI Platform** | FastAPI / Python 3.12 | `8000` | `http://localhost:8000/health` | `http://localhost:8000/docs` (OpenAPI) |
 | **Primary Database**| PostgreSQL 18 + pgvector | `5432` | TCP `5432` | SQL / pgvector |
 | **Cache & Queue** | Redis 7.4 / BullMQ | `6379` | TCP `6379` | Redis CLI |
+| **NGINX Gateway** | NGINX Alpine / Reverse Proxy | `80` | `http://localhost/` | HTTP / WebSocket |
 
-### 1. Full-Stack Docker Deployment
+### 1. Full-Stack Docker Deployment (Production Mesh)
 ```bash
 # Clone repository
 git clone https://github.com/Hellthefox808/BhashaSetu-AI-Offline-First-Multilingual-Education-Platform.git
 cd BhashaSetu-AI-Offline-First-Multilingual-Education-Platform
 
-# Start all microservices
+# Start all 6 microservices with multi-stage builds & healthchecks
 cd infra
 docker compose up -d --build
+```
+
+### 2. Production Kubernetes (K8s) Cluster Deployment
+```bash
+# Single-command Kustomize deployment to Kubernetes cluster
+kubectl apply -k infra/k8s/
+
+# Verify all pods, services, statefulsets, and HPA in bhashasetu-prod namespace
+kubectl get all -n bhashasetu-prod
+kubectl get hpa -n bhashasetu-prod
 ```
 
 ### 2. Running Microservices Locally

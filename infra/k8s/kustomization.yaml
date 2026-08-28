@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: bhashasetu-k8s
+
+namespace: bhashasetu-prod
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secrets.yaml
+  - postgres-statefulset.yaml
+  - redis-deployment.yaml
+  - ai-platform-deployment.yaml
+  - web-backend-deployment.yaml
+  - web-frontend-deployment.yaml
+  - ingress.yaml
+  - hpa.yaml
+
+commonLabels:
+  app.kubernetes.io/name: bhashasetu-ai
+  app.kubernetes.io/part-of: bhashasetu-platform
+  app.kubernetes.io/managed-by: kustomize

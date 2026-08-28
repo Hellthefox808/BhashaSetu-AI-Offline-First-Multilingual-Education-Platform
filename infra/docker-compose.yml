@@ -1,9 +1,23 @@
 version: '3.8'
 
+networks:
+  bhashasetu-mesh:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
+  audio-assets:
+    driver: local
+
 services:
+  # --- 1. PostgreSQL 18 with pgvector & DiskANN ---
   postgres:
     image: pgvector/pgvector:pg16
     container_name: bhashasetu-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_USER: bhashasetu_user
       POSTGRES_PASSWORD: bhashasetu_password
@@ -12,57 +26,157 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - bhashasetu-mesh
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bhashasetu_user -d bhashasetu_db"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
 
+  # --- 2. Redis 7.4 Task Queue & Cache ---
   redis:
     image: redis:7.4-alpine
     container_name: bhashasetu-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
     ports:
       - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - bhashasetu-mesh
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
 
+  # --- 3. AI Platform Microservice (FastAPI + Python 3.12) ---
   ai-platform:
     build:
       context: ../services/ai-platform
       dockerfile: Dockerfile
     container_name: bhashasetu-ai-platform
+    restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
       - PORT=8000
+      - PYTHONUNBUFFERED=1
+      - RAG_EMBEDDING_MODEL=BAAI/bge-m3
+      - LOG_LEVEL=info
+    volumes:
+      - audio-assets:/app/audio
+    networks:
+      - bhashasetu-mesh
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
 
+  # --- 4. Web Backend Enterprise Gateway (NestJS 11) ---
   web-backend:
     build:
       context: ../services/web-backend
       dockerfile: Dockerfile
     container_name: bhashasetu-web-backend
+    restart: unless-stopped
     ports:
       - "3001:3001"
     environment:
       - PORT=3001
+      - NODE_ENV=production
       - DATABASE_URL=postgresql://bhashasetu_user:bhashasetu_password@postgres:5432/bhashasetu_db
       - REDIS_URL=redis://redis:6379
       - AI_SERVICE_URL=http://ai-platform:8000
+      - JWT_SECRET=bhashasetu_enterprise_jwt_secret_2026_sih
     depends_on:
-      - postgres
-      - redis
-      - ai-platform
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ai-platform:
+        condition: service_healthy
+    networks:
+      - bhashasetu-mesh
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/v1/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1G
 
+  # --- 5. Web Frontend (Next.js 16.3 + React 19.2) ---
   web-frontend:
     build:
       context: ../apps/web-frontend
       dockerfile: Dockerfile
     container_name: bhashasetu-web-frontend
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
       - PORT=3000
+      - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1
     depends_on:
-      - web-backend
+      web-backend:
+        condition: service_healthy
+    networks:
+      - bhashasetu-mesh
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1G
 
-volumes:
-  pgdata:
+  # --- 6. NGINX Reverse Proxy & SSL Gateway ---
+  nginx-gateway:
+    image: nginx:alpine
+    container_name: bhashasetu-nginx-gateway
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web-frontend
+      - web-backend
+      - ai-platform
+    networks:
+      - bhashasetu-mesh
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
