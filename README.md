@@ -19,43 +19,79 @@
 
 ---
 
+> [!IMPORTANT]
+> **SIH Problem Statement (SIH26042):** BhashaSetu AI solves the linguistic disconnect between non-native Hindi-speaking primary school teachers and tribal students whose mother tongues are **Santhali (Ol Chiki)**, **Ho (Warang Chiti)**, and **Mundari (Devanagari)**. The platform enables curriculum delivery, real-time voice translation, and formative assessments with **100% offline classroom durability**.
+
+---
+
 ## 📑 Table of Contents
-1. [Executive Summary & Problem Statement](#-executive-summary--problem-statement)
-2. [Master Full-Stack Architecture](#-master-full-stack-architecture)
-3. [Subsystems Deep Dive](#-subsystems-deep-dive)
+1. [Executive Summary & Educational Context](#-executive-summary--educational-context)
+2. [Target Languages & Script Unicode Matrix](#-target-languages--script-unicode-matrix)
+3. [Master Full-Stack Architecture](#-master-full-stack-architecture)
+4. [Subsystems Deep Dive](#-subsystems-deep-dive)
    - [A. Web Frontend (`apps/web-frontend`)](#a-web-frontend-appsweb-frontend)
    - [B. Android Edge Client (`app/` / `apps/mobile`)](#b-android-edge-client-app--appsmobile)
    - [C. Enterprise Gateway Core (`services/web-backend`)](#c-enterprise-gateway-core-servicesweb-backend)
    - [D. AI / ML Microservice (`services/ai-platform`)](#d-ai--ml-microservice-servicesai-platform)
    - [E. Shared Contracts (`packages/contracts`)](#e-shared-contracts-packagescontracts)
-4. [Business Logic & Pedagogical Invariants](#-business-logic--pedagogical-invariants)
-5. [Hybrid RAG Retrieval Engine](#-hybrid-rag-retrieval-engine)
-6. [Live Voice-to-Voice Latency Budget](#-live-voice-to-voice-latency-budget)
-7. [Offline-First Local Storage & Durable Outbox Sync](#-offline-first-local-storage--durable-outbox-sync)
-8. [Automated Verification & Benchmark Proofs](#-automated-verification--benchmark-proofs)
-9. [Living Documentation Suite](#-living-documentation-suite)
-10. [Quickstart & Deployment Guide](#-quickstart--deployment-guide)
-11. [Security, Governance & Data Sovereignty](#-security-governance--data-sovereignty)
+5. [Business Logic & Pedagogical Invariants](#-business-logic--pedagogical-invariants)
+6. [Hybrid RAG Retrieval Engine](#-hybrid-rag-retrieval-engine)
+7. [Live Voice-to-Voice Latency Budget](#-live-voice-to-voice-latency-budget)
+8. [Offline-First Local Storage & Durable Outbox Sync](#-offline-first-local-storage--durable-outbox-sync)
+9. [Automated Verification & Benchmark Proofs](#-automated-verification--benchmark-proofs)
+10. [Living Master Documentation Suite](#-living-documentation-suite)
+11. [Quickstart & Deployment Guide](#-quickstart--deployment-guide)
+12. [Security, Governance & Data Sovereignty](#-security-governance--data-sovereignty)
 
 ---
 
-## 🌟 Executive Summary & Problem Statement
+## 🌟 Executive Summary & Educational Context
 
-### The Educational Crisis in Jharkhand Primary Schools
-In rural government schools across Jharkhand (Dumka, West Singhbhum, Khunti, Chaibasa, Pakur), **over 80% of Grade 1 students speak exclusively indigenous Austroasiatic languages**:
-- **Santhali (ᱥᱟᱱᱛᱟᱲᱤ)** — Ol Chiki script
-- **Ho (ᱦᱳ)** — Warang Chiti script
-- **Mundari (मुण्डारी)** — Devanagari / Nag Mundari script
+### The Language Barrier in Primary Classrooms
+In rural government schools across Jharkhand (focus on **Dumka, West Singhbhum, Khunti, Chaibasa, and Pakur**), over **80% of entering Grade 1 students speak exclusively indigenous Austroasiatic languages**. State-prescribed textbooks (JCERT/NCERT) and teachers communicate in **Standard Hindi**. 
 
-However, state-prescribed learning materials (JCERT/NCERT) and non-native government school teachers communicate in **Standard Hindi**. This severe linguistic mismatch prevents early childhood foundational literacy and numeracy (FLN), driving dropout rates above 40% and suppressing Grade 3 reading competency below 30%.
+Because children cannot comprehend classroom instruction, early childhood foundational literacy and numeracy (FLN) suffers severely, resulting in a **>40% primary dropout rate** and **<30% Grade 3 reading competency**.
 
-### The BhashaSetu AI Solution
-**BhashaSetu AI (भाषासेतु)** is an offline-first educational AI ecosystem that empowers Hindi-speaking teachers to scaffold, translate, and deliver culturally contextualized lessons in tribal mother tongues. It combines:
-1. **Curriculum-Grounded Hybrid RAG:** 15 preloaded JCERT Grades 1–5 nodes across FLN Literacy, Math, EVS, and Tribal Heritage.
-2. **Pedagogical Invariant Adapter:** Injects localized cultural analogies (Sarhul, Karam, Sohrai, weekly Haat markets, Paila/Kuri traditional measures) while maintaining exact learning outcomes.
-3. **Live Voice Dialogue:** Sub-3-second streaming speech translation ($1855\text{ms}$ measured) between Hindi and target tribal languages.
-4. **Durable Outbox Sync:** 100% offline classroom operation on low-cost $\sim 2\text{GB}$ RAM Android tablets with cryptographic UUID idempotency and delta cursor reconciliation.
-5. **Human-in-the-Loop (HITL) Quality Gate:** Unbabel COMET ($0.954$) scoring and native linguist review workflows.
+```text
+Hindi Teacher (Non-native Speaker)
+     │
+     ▼
+Curriculum Grounding (15 JCERT Nodes across FLN, Math, EVS, Heritage)
+     │
+     ▼
+Multilingual Translation & Transliteration (Ol Chiki ᱚᱞ ᱪᱤᱠᱤ / Warang Chiti ᱦᱳ / Devanagari)
+     │
+     ▼
+Pedagogical Cultural Adaptation (Sarhul, Karam, Sohrai, Haat Market Metaphors)
+     │
+     ▼
+Human-in-the-Loop (HITL) Teacher Review & Approval (COMET Score: 0.954)
+     │
+     ▼
+Voice + Text + Visual Classroom Delivery (24 kHz Audio, Worksheets, Flashcards)
+     │
+     ▼
+100% Offline Classroom Practice & Interactive Quizzes (SQLite Room / Drift)
+     │
+     ▼
+Durable Outbox Synchronization (UUID Idempotent Gzip Push to Cloud Backend)
+     │
+     ▼
+State & District Administrative Telemetry (142 Schools Monitored in Real-Time)
+```
+
+---
+
+## 🔤 Target Languages & Script Unicode Matrix
+
+| Language | Script System | Unicode Block | ISO-639-3 | Sample Classroom Text | Phonetic Transliteration (Hindi / Latin) | Focus Districts |
+|---|---|---|---|---|---|---|
+| **Santhali** | **Ol Chiki (ᱚᱞ ᱪᱤᱠᱤ)** | `U+1C50..U+1C7F` | `sat_Olck` | ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ, ᱫᱟᱨᱮ ᱟᱨ ᱥᱟᱠᱟᱢ ᱵᱟᱵᱚᱛ ᱛᱮᱵᱚᱱ ᱪᱮᱫᱚᱜᱼᱟ᱾ | गिदरा को, दारे आर साकाम बाबत तेबोन चेदोग-आ।<br/>*(Gidra ko, dare aar sakam babot tebon chedog-aa)* | Dumka, Pakur, Santhal Pargana |
+| **Ho** | **Warang Chiti (ᱣᱟᱨᱟᱝ ᱪᱤᱛᱤ)** | `U+118A0..U+118FF` | `hoc_Wara` | ᱦᱳ ᱠᱚ, ᱥᱟᱨᱡᱚᱢ ᱫᱟᱨᱩ ᱟᱨ ᱥᱟᱠᱟᱢ ᱤᱛᱩᱱ ᱦᱩᱭᱩᱜ-ᱟ᱾ | हो को, सरजोम दारू आर साकाम इतुन हुयुग-आ।<br/>*(Ho ko, sarjom daru aar sakam itun huyug-aa)* | West Singhbhum, Chaibasa, Kolhan |
+| **Mundari** | **Devanagari (मुण्डारी)** | `U+0900..U+097F` | `unr_Deva` | गिदरा को, तेहेंज आबु सरजोम दारू आर साकाम बाबत ते चेदोग-आ। | गिदरा को, तेहेंज आबु सरजोम दारू आर साकाम बाबत ते चेदोग-आ।<br/>*(Gidra ko, tehenj abu sarjom daru aar sakam babot te chedog-aa)* | Khunti, Ranchi, Torpa |
+
+> [!TIP]
+> **Orthographic Invariance:** BhashaSetu AI provides **dual phonetic transliteration** (Hindi Devanagari + Latin IPA) alongside native scripts so non-native teachers can pronounce tribal words accurately in front of the class.
 
 ---
 
@@ -114,13 +150,13 @@ graph TD
 - **Framework:** Next.js 16.3 (App Router) + React 19.2 + TypeScript 5 (Strict Mode).
 - **Styling & Components:** Tailwind CSS v4 + Radix UI accessible headless primitives.
 - **State Architecture:**
-  - **Server State:** TanStack Query v5 with optimistic updates and aggressive background caching.
+  - **Server State:** TanStack Query v5 with optimistic updates and background revalidation.
   - **Client UI State:** Zustand stores for canvas manipulation, script toggles, and audio recording buffers.
-- **Key Modules:**
+- **Key Portals:**
   - `features/lesson-studio/`: Multi-step lesson generation canvas with native Ol Chiki font rendering and bilingual preview.
   - `features/voice-dialogue/`: Real-time microphone capture with WebSocket streaming and waveform visualizer.
   - `features/admin-analytics/`: Interactive district heatmaps showing school-by-school FLN attainment across 142 institutions.
-  - `features/linguist-review/`: Dedicated portal for native language scholars (e.g., Dr. Sunita Soren persona) to inspect and correct AI translation memory.
+  - `features/linguist-review/`: Dedicated portal for native language scholars (Dr. Sunita Soren persona) to inspect and correct AI translation memory.
 
 ### B. Android Edge Client (`app/` / `apps/mobile`)
 - **Runtime:** Native Kotlin with Jetpack Compose / Flutter 3.x for ARM64 low-cost tablets (Android 9+, $\sim 2\text{ GB}$ RAM).
@@ -187,10 +223,8 @@ In BhashaSetu AI, **Translation $\neq$ Pedagogy**. Literal machine translation o
    HITL Review: Teacher clicks "Approve & Teach"
 ```
 
-### Core Invariant Rules
-- **Rule 1 (LO Invariance):** Pedagogical adaptation may simplify syntax and inject local metaphors, but **must never alter the state-prescribed learning outcome**.
-- **Rule 2 (Script Authenticity):** Santhali must render in authentic Ol Chiki (Unicode `U+1C50–U+1C7F`), Ho in Warang Chiti (Unicode `U+118A0–U+118FF`), accompanied by dual Hindi/Latin transliteration for teacher pronunciation guidance.
-- **Rule 3 (Human-in-the-Loop):** No AI-generated lesson can be published to field tablets without explicit teacher approval or certified linguist review.
+> [!NOTE]
+> **The Pedagogical Invariant Law:** Pedagogical adaptation may contextualize vocabulary and introduce local tribal folklore, but **must never alter the state-prescribed learning outcome (LO code)**.
 
 ---
 
@@ -202,9 +236,32 @@ $$\text{RRF Score}(d) = \frac{1}{60 + \max(0, 10 - \text{BM25}(d))} + 0.6 \times
 
 $$\text{Rerank Score}(d) = \text{RRF Score}(d) + 0.50 \cdot \mathbb{I}_{\text{LO Match}} + 0.30 \cdot |T_q \cap T_{\text{topic}}| + 0.20 \cdot |T_q \cap T_{\text{title}}| + 0.12 \cdot |T_q \cap T_{\text{content}}|$$
 
+<details>
+<summary><b>Click to expand 15-Query Hybrid RAG Benchmark Report (100% Precision)</b></summary>
+
 ```text
 =======================================================
   FINAL RAG RETRIEVAL BENCHMARK REPORT (15/15 JCERT NODES)
+=======================================================
+
+Query                                            | Expected           | Top Retrieved      | Rank  | Latency
+--------------------------------------------------------------------------------------------------------------
+हमारे आस-पास के साल और महुआ के पेड़              | JCERT_G2_EVS_01    | JCERT_G2_EVS_01    | 1     | 1.38ms
+1 से 10 तक गिनती और समूह बनाना                   | JCERT_G1_MATH_01   | JCERT_G1_MATH_01   | 1     | 1.08ms
+प्राकृतिक नदियां और स्वच्छ जल का संरक्षण         | JCERT_G3_FLN_01    | JCERT_G3_FLN_01    | 1     | 1.10ms
+जंगल में रहने वाले जंगली जानवर हाथी और मोर       | JCERT_G4_EVS_01    | JCERT_G4_EVS_01    | 1     | 1.15ms
+झारखंड के लोकपर्व सरहुल और सोहराय की परंपरा      | JCERT_G5_HERITAGE_01 | JCERT_G5_HERITAGE_01 | 1     | 1.03ms
+हाट बाजार में जोड़ और घटाव के सरल खेल            | JCERT_G2_MATH_02   | JCERT_G2_MATH_02   | 1     | 0.93ms
+धान, मक्का, मड़ुआ और गोंदली की फसल               | JCERT_G3_EVS_02    | JCERT_G3_EVS_02    | 1     | 0.88ms
+नीम और करंज की दातुन से स्वच्छता और स्वास्थ्य    | JCERT_G4_FLN_03    | JCERT_G4_FLN_03    | 1     | 0.87ms
+सूर्य, पृथ्वी और सौरमंडल की गति                  | JCERT_G5_EVS_03    | JCERT_G5_EVS_03    | 1     | 0.94ms
+हमारा प्यारा परिवार, घर, माता-पिता और भाई-बहन    | JCERT_G1_FLN_02    | JCERT_G1_FLN_02    | 1     | 0.95ms
+हमारे शरीर के अंग आँख, कान, नाक और ज्ञानेंद्रि   | JCERT_G1_EVS_01    | JCERT_G1_EVS_01    | 1     | 0.89ms
+दिनचर्या, सुबह उठना, विद्यालय जाना और खेलकूद     | JCERT_G2_FLN_02    | JCERT_G2_FLN_02    | 1     | 0.83ms
+अनाज नापने के पारंपरिक माप पैला और कुड़ी         | JCERT_G3_MATH_03   | JCERT_G3_MATH_03   | 1     | 1.03ms
+सोहराय और कोहबर भित्तिचित्र लोक कला              | JCERT_G4_HERITAGE_02 | JCERT_G4_HERITAGE_02 | 1     | 1.42ms
+वनों और जंगलों की रक्षा तथा पर्यावरण संरक्षण     | JCERT_G5_FLN_04    | JCERT_G5_FLN_04    | 1     | 0.92ms
+
 =======================================================
 • Total Queries Tested   : 15
 • Recall@1 Score        : 100.0% (15/15)
@@ -213,6 +270,7 @@ $$\text{Rerank Score}(d) = \text{RRF Score}(d) + 0.50 \cdot \mathbb{I}_{\text{LO
 • Avg Retrieval Latency  : 1.03 ms
 =======================================================
 ```
+</details>
 
 ---
 
@@ -290,7 +348,6 @@ GET /api/v1/sync/pull (Advance sync cursor to receive new approved curriculum no
 
 The repository includes a master test suite and benchmark suite:
 
-### 1. Master 11-Tier Verification Suite (`tests/verify_all.py`)
 ```bash
 python tests/verify_all.py
 ```
@@ -318,46 +375,6 @@ OK
 [PASS] Test 11: Educational metadata filtering (District, Bloom Level, Competency) verified.
 ```
 
-### 2. 15-Query Hybrid RAG Benchmark Suite (`tests/benchmark_rag.py`)
-```bash
-python tests/benchmark_rag.py
-```
-```text
-=======================================================
-  BHASHASETU AI -- HYBRID RAG BENCHMARK & EVALUATION
-=======================================================
-
-Query                                            | Expected           | Top Retrieved      | Rank  | Latency
---------------------------------------------------------------------------------------------------------------
-हमारे आस-पास के साल और महुआ के पेड़              | JCERT_G2_EVS_01    | JCERT_G2_EVS_01    | 1     | 1.38ms
-1 से 10 तक गिनती और समूह बनाना                   | JCERT_G1_MATH_01   | JCERT_G1_MATH_01   | 1     | 1.08ms
-प्राकृतिक नदियां और स्वच्छ जल का संरक्षण         | JCERT_G3_FLN_01    | JCERT_G3_FLN_01    | 1     | 1.10ms
-जंगल में रहने वाले जंगली जानवर हाथी और मोर       | JCERT_G4_EVS_01    | JCERT_G4_EVS_01    | 1     | 1.15ms
-झारखंड के लोकपर्व सरहुल और सोहराय की परंपरा      | JCERT_G5_HERITAGE_01 | JCERT_G5_HERITAGE_01 | 1     | 1.03ms
-हाट बाजार में जोड़ और घटाव के सरल खेल            | JCERT_G2_MATH_02   | JCERT_G2_MATH_02   | 1     | 0.93ms
-धान, मक्का, मड़ुआ और गोंदली की फसल               | JCERT_G3_EVS_02    | JCERT_G3_EVS_02    | 1     | 0.88ms
-नीम और करंज की दातुन से स्वच्छता और स्वास्थ्य    | JCERT_G4_FLN_03    | JCERT_G4_FLN_03    | 1     | 0.87ms
-सूर्य, पृथ्वी और सौरमंडल की गति                  | JCERT_G5_EVS_03    | JCERT_G5_EVS_03    | 1     | 0.94ms
-हमारा प्यारा परिवार, घर, माता-पिता और भाई-बहन    | JCERT_G1_FLN_02    | JCERT_G1_FLN_02    | 1     | 0.95ms
-हमारे शरीर के अंग आँख, कान, नाक और ज्ञानेंद्रि   | JCERT_G1_EVS_01    | JCERT_G1_EVS_01    | 1     | 0.89ms
-दिनचर्या, सुबह उठना, विद्यालय जाना और खेलकूद     | JCERT_G2_FLN_02    | JCERT_G2_FLN_02    | 1     | 0.83ms
-अनाज नापने के पारंपरिक माप पैला और कुड़ी         | JCERT_G3_MATH_03   | JCERT_G3_MATH_03   | 1     | 1.03ms
-सोहराय और कोहबर भित्तिचित्र लोक कला              | JCERT_G4_HERITAGE_02 | JCERT_G4_HERITAGE_02 | 1     | 1.42ms
-वनों और जंगलों की रक्षा तथा पर्यावरण संरक्षण     | JCERT_G5_FLN_04    | JCERT_G5_FLN_04    | 1     | 0.92ms
-
-=======================================================
-  FINAL RAG RETRIEVAL BENCHMARK REPORT
-=======================================================
-• Total Queries Tested   : 15
-• Recall@1 Score        : 100.0% (15/15)
-• Recall@3 Score        : 100.0% (15/15)
-• Mean Reciprocal Rank   : 1.0000
-• Avg Retrieval Latency  : 1.03 ms
-=======================================================
-
-[PASSED] All 15 Hybrid RAG benchmark criteria met with 100% accuracy!
-```
-
 ---
 
 ## 📑 Living Documentation Suite
@@ -375,27 +392,25 @@ All system documentation is synchronized in the [`docs/`](docs/) directory:
 
 ## 🚀 Quickstart & Deployment Guide
 
-### Prerequisites
-- Node.js 22 LTS & pnpm / npm
-- Python 3.12 & virtualenv
-- Docker & Docker Compose
-- Android Studio (Ladybug 2024.2+ / API 24+)
+### Port & Service Topology
+| Service | Runtime | Port | Health Path | Documentation Path |
+|---|---|---|---|---|
+| **Web Frontend** | Next.js 16.3 / Node 22 | `3000` | `http://localhost:3000/api/health` | App Router |
+| **Web Backend** | NestJS 11 / Node 22 | `3001` | `http://localhost:3001/api/v1/health` | `http://localhost:3001/api/docs` (Swagger) |
+| **AI Platform** | FastAPI / Python 3.12 | `8000` | `http://localhost:8000/health` | `http://localhost:8000/docs` (OpenAPI) |
+| **Primary Database**| PostgreSQL 18 + pgvector | `5432` | TCP `5432` | SQL / pgvector |
+| **Cache & Queue** | Redis 7.4 / BullMQ | `6379` | TCP `6379` | Redis CLI |
 
 ### 1. Full-Stack Docker Deployment
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/Hellthefox808/BhashaSetu-AI-Offline-First-Multilingual-Education-Platform.git
 cd BhashaSetu-AI-Offline-First-Multilingual-Education-Platform
 
-# Start all services with Docker Compose
+# Start all microservices
 cd infra
 docker compose up -d --build
 ```
-- **Web Frontend:** `http://localhost:3000`
-- **Web Backend (NestJS):** `http://localhost:3001/api/v1` (Swagger docs: `http://localhost:3001/api/docs`)
-- **AI Platform (FastAPI):** `http://localhost:8000/docs`
-- **PostgreSQL 18 + pgvector:** `localhost:5432`
-- **Redis 7.4:** `localhost:6379`
 
 ### 2. Running Microservices Locally
 
@@ -410,7 +425,7 @@ source venv/bin/activate
 
 pip install fastapi uvicorn pydantic
 python main.py
-# AI Service will run on http://localhost:8000
+# AI Service active on http://localhost:8000
 ```
 
 #### Web Backend (NestJS)
@@ -418,7 +433,7 @@ python main.py
 cd services/web-backend
 npm install
 npm run start:dev
-# Backend Gateway will run on http://localhost:3001
+# Backend Gateway active on http://localhost:3001
 ```
 
 #### Web Frontend (Next.js)
@@ -426,13 +441,13 @@ npm run start:dev
 cd apps/web-frontend
 npm install
 npm run dev
-# Web Frontend will run on http://localhost:3000
+# Web Frontend active on http://localhost:3000
 ```
 
 #### Android Field Application
-1. Open Android Studio and open the project root directory.
-2. Ensure Android SDK 24+ (Android 7.0 to Android 14) is installed.
-3. Build and launch on target ARM64 tablet or emulator.
+1. Open Android Studio (Ladybug 2024.2+).
+2. Open the project root directory.
+3. Build and launch on target ARM64 tablet or emulator (Android 9+).
 
 ---
 
@@ -447,5 +462,5 @@ npm run dev
 ---
 
 ## 📄 License & Attribution
-Developed for educational equity in multilingual primary education under the **MIT License**.
+Developed for educational equity in multilingual primary education under the **MIT License**.  
 Sponsored & Submitted under **Smart India Hackathon (SIH 2026) — Problem Statement SIH26042**.
