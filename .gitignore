@@ -1,4 +1,4 @@
-# Gradle & Build artifacts
+# Gradle & Android Build artifacts
 *.iml
 .gradle/
 build/
@@ -12,7 +12,33 @@ local.properties
 *.apk
 *.aab
 
-# IDE & Editor files
+# Node & Frontend Build artifacts
+node_modules/
+.next/
+out/
+dist/
+.turbo/
+.npm/
+
+# Python & AI artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# AI Assistant & IDE / Agent files
+.agents/
+.gemini/
+.system_generated/
+.codelens/
 .idea/
 /.idea/caches
 /.idea/libraries
@@ -22,11 +48,9 @@ local.properties
 /.idea/assetWizardSettings.xml
 .vscode/
 .cursor/
-.agents/
 .windsurfrules
 .nex/
 .kombai/
-.codelens/
 
 # Environment & Secrets
 .env
@@ -41,3 +65,5 @@ debug.keystore
 Thumbs.db
 *.log
 logs/
+*.tmp
+*.bak

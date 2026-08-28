@@ -17,6 +17,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@bhashasetu/contracts": ["../../packages/contracts/src"]
+    },
     "plugins": [
       {
         "name": "next"

@@ -1,0 +1,215 @@
+import { Injectable } from '@nestjs/common';
+import { CurriculumNode } from '@bhashasetu/contracts';
+
+@Injectable()
+export class CurriculumService {
+  private curriculumNodes: CurriculumNode[] = [
+    {
+      id: 'JCERT_G2_EVS_01',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_2',
+      subject: 'ENVIRONMENTAL_STUDIES',
+      chapterNumber: 3,
+      chapterTitle: 'हमारे आस-पास के पेड़ और पत्तियाँ',
+      learningOutcomeCode: 'LO-EVS-G2-03',
+      learningOutcomeDescription: 'Identify local trees (Sal, Mahua, Karam) and leaf structures in indigenous context.',
+      hindiConceptSummary: 'पेड़ों की विविधता, पत्तों के प्रकार और सरहुल पर्व में साल वृक्ष का महत्व।',
+      culturalKeywords: ['साल', 'सखुआ', 'महुआ', 'करम', 'सरहुल', 'पत्तल', 'दातुन']
+    },
+    {
+      id: 'JCERT_G1_MATH_01',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_1',
+      subject: 'MATHEMATICS',
+      chapterNumber: 1,
+      chapterTitle: 'गिनती और समूह (1 से 10)',
+      learningOutcomeCode: 'LO-MATH-G1-01',
+      learningOutcomeDescription: 'Count objects up to 10 and group them using local tribal analogies.',
+      hindiConceptSummary: 'वस्तुओं को 10-10 के बंडलों में गिनना और हाट बाजार में उपयोग समझना।',
+      culturalKeywords: ['गिनती', 'बंडल', 'महुआ फल', 'हाट बाजार', 'कुल्हड़']
+    },
+    {
+      id: 'JCERT_G3_FLN_01',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_3',
+      subject: 'LANGUAGE_FLN',
+      chapterNumber: 2,
+      chapterTitle: 'जल और नदियां',
+      learningOutcomeCode: 'LO-FLN-G3-02',
+      learningOutcomeDescription: 'Understand the importance of clean water sources in forest and village ecosystems.',
+      hindiConceptSummary: 'प्राकृतिक झरनों, नदियों और कुओं के संरक्षण की समझ।',
+      culturalKeywords: ['जल', 'पानी', 'झरना', 'दाग', 'दाः', 'संरक्षण']
+    },
+    {
+      id: 'JCERT_G4_EVS_01',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_4',
+      subject: 'ENVIRONMENTAL_STUDIES',
+      chapterNumber: 5,
+      chapterTitle: 'पशु-पक्षी और उनका प्राकृतिक आवास',
+      learningOutcomeCode: 'LO-EVS-G4-01',
+      learningOutcomeDescription: 'Classify domestic and wild animals in Jharkhand forest ecosystems.',
+      hindiConceptSummary: 'जंगली व पालतू जीव, हाथी, मोर, हिरण और पर्यावरण संतुलन।',
+      culturalKeywords: ['जानवर', 'पशु', 'पक्षी', 'हाथी', 'मोर', 'जंगल', 'हिरण']
+    },
+    {
+      id: 'JCERT_G5_HERITAGE_01',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_5',
+      subject: 'TRIBAL_HERITAGE',
+      chapterNumber: 1,
+      chapterTitle: 'झारखंड के पारंपरिक लोकपर्व (सरहुल, करम, सोहराय)',
+      learningOutcomeCode: 'LO-HER-G5-01',
+      learningOutcomeDescription: 'Demonstrate understanding of indigenous festivals, nature worship, and music traditions.',
+      hindiConceptSummary: 'सरहुल, करम, सोहराय, मांदर वादन और अखड़ा लोक संस्कृति।',
+      culturalKeywords: ['सरहुल', 'करम', 'सोहराय', 'संस्कृति', 'परब', 'अखड़ा', 'मांदर']
+    },
+    {
+      id: 'JCERT_G1_FLN_02',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_1',
+      subject: 'LANGUAGE_FLN',
+      chapterNumber: 4,
+      chapterTitle: 'हमारा प्यारा परिवार और घर',
+      learningOutcomeCode: 'LO-FLN-G1-04',
+      learningOutcomeDescription: 'Express relationships and roles within tribal families and households.',
+      hindiConceptSummary: 'परिवार में माता, पिता, दादा, दादी, भाई और बहन के रिश्ते।',
+      culturalKeywords: ['परिवार', 'घर', 'माता', 'पिता', 'भाई', 'बहन', 'ओड़ाः']
+    },
+    {
+      id: 'JCERT_G2_MATH_02',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_2',
+      subject: 'MATHEMATICS',
+      chapterNumber: 6,
+      chapterTitle: 'जोड़ और घटाव के सरल खेल',
+      learningOutcomeCode: 'LO-MATH-G2-06',
+      learningOutcomeDescription: 'Perform single and double digit addition and subtraction using seeds and market bartering.',
+      hindiConceptSummary: 'हाट बाजार में खरीद-बिक्री, कंकड़ों और बीजों से जोड़-घटाव।',
+      culturalKeywords: ['जोड़', 'घटाव', 'कंकड़', 'बीज', 'हाट', 'बाजार']
+    },
+    {
+      id: 'JCERT_G3_EVS_02',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_3',
+      subject: 'ENVIRONMENTAL_STUDIES',
+      chapterNumber: 8,
+      chapterTitle: 'भोजन, अनाज और स्थानीय कृषि',
+      learningOutcomeCode: 'LO-EVS-G3-08',
+      learningOutcomeDescription: 'Identify local staple crops (Paddy, Corn, Mandua, Gundli) and nutrition.',
+      hindiConceptSummary: 'स्थानीय फसलें, धान, मक्का, मड़ुआ और पारंपरिक भोजन का पोषण महत्व।',
+      culturalKeywords: ['अनाज', 'धान', 'मक्का', 'मड़ुआ', 'गोंदली', 'कृषि']
+    },
+    {
+      id: 'JCERT_G4_FLN_03',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_4',
+      subject: 'LANGUAGE_FLN',
+      chapterNumber: 7,
+      chapterTitle: 'स्वच्छता, स्वास्थ्य और योग',
+      learningOutcomeCode: 'LO-FLN-G4-03',
+      learningOutcomeDescription: 'Adopt traditional hygiene practices including Neem datun and clean water consumption.',
+      hindiConceptSummary: 'दातुन, हाथ धोना, स्वच्छ जल और स्वस्थ दिनचर्या।',
+      culturalKeywords: ['स्वच्छता', 'स्वास्थ्य', 'दातुन', 'नीम', 'करंज']
+    },
+    {
+      id: 'JCERT_G5_EVS_03',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_5',
+      subject: 'ENVIRONMENTAL_STUDIES',
+      chapterNumber: 11,
+      chapterTitle: 'सौरमंडल, सूर्य और पृथ्वी',
+      learningOutcomeCode: 'LO-EVS-G5-11',
+      learningOutcomeDescription: 'Explain the role of the Sun (Singbonga) in the solar system and day-night cycle.',
+      hindiConceptSummary: 'सूर्य, पृथ्वी की गति, दिन-रात और सौर ऊर्जा की समझ।',
+      culturalKeywords: ['सूर्य', 'पृथ्वी', 'सौरमंडल', 'प्रकाश', 'सिंगबोंगा']
+    },
+    {
+      id: 'JCERT_G1_EVS_01',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_1',
+      subject: 'ENVIRONMENTAL_STUDIES',
+      chapterNumber: 2,
+      chapterTitle: 'हमारे शरीर के अंग और ज्ञानेंद्रियाँ',
+      learningOutcomeCode: 'LO-EVS-G1-02',
+      learningOutcomeDescription: 'Identify five sense organs (Eyes, Ears, Nose, Tongue, Skin) in indigenous terms.',
+      hindiConceptSummary: 'आँख, कान, नाक, जीभ और हाथ की पहचान और कार्य।',
+      culturalKeywords: ['शरीर', 'आँख', 'कान', 'नाक', 'जीभ', 'हाथ']
+    },
+    {
+      id: 'JCERT_G2_FLN_02',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_2',
+      subject: 'LANGUAGE_FLN',
+      chapterNumber: 5,
+      chapterTitle: 'दिनचर्या, खेलकूद और अच्छी आदतें',
+      learningOutcomeCode: 'LO-FLN-G2-05',
+      learningOutcomeDescription: 'Describe daily school routines and traditional community playground activities.',
+      hindiConceptSummary: 'सुबह उठना, दातुन करना, विद्यालय जाना और मित्रों संग खेलना।',
+      culturalKeywords: ['दिनचर्या', 'सुबह', 'विद्यालय', 'खेलकूद', 'आसड़ा']
+    },
+    {
+      id: 'JCERT_G3_MATH_03',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_3',
+      subject: 'MATHEMATICS',
+      chapterNumber: 9,
+      chapterTitle: 'माप और भार की पारंपरिक इकाइयां (पैला और कुड़ी)',
+      learningOutcomeCode: 'LO-MATH-G3-04',
+      learningOutcomeDescription: 'Compare traditional volumetric measures (Paila, Kuri) with standard kilogram/gram units.',
+      hindiConceptSummary: 'पैला और कुड़ी से अनाज नापना और मानक तराजू-बांट का उपयोग।',
+      culturalKeywords: ['माप', 'भार', 'पैला', 'कुड़ी', 'तराजू', 'वजन']
+    },
+    {
+      id: 'JCERT_G4_HERITAGE_02',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_4',
+      subject: 'TRIBAL_HERITAGE',
+      chapterNumber: 8,
+      chapterTitle: 'झारखंड की लोक कला और सोहराय पेंटिंग',
+      learningOutcomeCode: 'LO-HER-G4-02',
+      learningOutcomeDescription: 'Understand Sohrai and Kohbar mural art styles using natural pigments.',
+      hindiConceptSummary: 'सोहराय चित्रकला, भित्तिचित्र, मिट्टी के प्राकृतिक रंग और पशु-पक्षी आकृतियां।',
+      culturalKeywords: ['सोहराय', 'कोहबर', 'चित्रकला', 'भित्तिचित्र', 'मिट्टी']
+    },
+    {
+      id: 'JCERT_G5_FLN_04',
+      state: 'JHARKHAND',
+      board: 'JCERT',
+      grade: 'GRADE_5',
+      subject: 'LANGUAGE_FLN',
+      chapterNumber: 12,
+      chapterTitle: 'जंगल, पर्यावरण और हमारी पृथ्वी की रक्षा',
+      learningOutcomeCode: 'LO-FLN-G5-06',
+      learningOutcomeDescription: 'Advocate for forest preservation, biodiversity, and community forest rights.',
+      hindiConceptSummary: 'वनों का महत्व, ऑक्सीजन, वर्षा, जड़ी-बूटियां और पर्यावरण संरक्षण।',
+      culturalKeywords: ['जंगल', 'पर्यावरण', 'रक्षा', 'वन', 'ऑक्सीजन']
+    }
+  ];
+
+  findAll(grade?: string, subject?: string): CurriculumNode[] {
+    return this.curriculumNodes.filter((node) => {
+      if (grade && node.grade !== grade) return false;
+      if (subject && node.subject !== subject) return false;
+      return true;
+    });
+  }
+
+  findOne(id: string): CurriculumNode | undefined {
+    return this.curriculumNodes.find((node) => node.id === id);
+  }
+}

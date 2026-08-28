@@ -10,6 +10,9 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "strict": true
+    "strict": true,
+    "paths": {
+      "@bhashasetu/contracts": ["../../packages/contracts/src"]
+    }
   }
 }
