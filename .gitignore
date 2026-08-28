@@ -35,6 +35,8 @@ ENV/
 htmlcov/
 
 # AI Assistant & IDE / Agent files
+CLAUDE.md
+.claude/
 .agents/
 .gemini/
 .system_generated/
@@ -48,6 +50,7 @@ htmlcov/
 /.idea/assetWizardSettings.xml
 .vscode/
 .cursor/
+.cursorrules
 .windsurfrules
 .nex/
 .kombai/
