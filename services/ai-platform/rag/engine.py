@@ -2,19 +2,28 @@
 BhashaSetu AI — Fine-Tuned Hybrid RAG Retrieval Engine (v3.0.0-PROD)
 Combines Okapi BM25 Lexical Scoring with Dense Multilingual Embeddings (Concept Projection),
 Reciprocal Rank Fusion (RRF), and Cross-Encoder Reranking.
-Preloaded with 15 Comprehensive JCERT Grades 1-5 Primary Curriculum Chunks across FLN, Math, EVS, Science, and Tribal Heritage.
+Preloaded with 15 Comprehensive JCERT Grades 1-5 Primary Curriculum Chunks with Rich Educational Metadata.
 """
 
 from typing import List, Dict, Any, Optional, Set, Tuple
 import math
 import re
 
-# --- Comprehensive 15-Node JCERT Curriculum Knowledge Base ---
+# --- Comprehensive 15-Node JCERT Curriculum Knowledge Base with Enriched Metadata ---
 JCERT_KNOWLEDGE_BASE = [
     {
         "chunk_id": "JCERT_G2_EVS_01",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Dumka",
+        "block": "Shikaripara",
         "grade": "GRADE_2",
         "subject": "ENVIRONMENTAL_STUDIES",
+        "competency_category": "EVS_ENVIRONMENT",
+        "bloom_level": "UNDERSTAND",
+        "textbook_name": "हमारी दुनिया (भाग 2)",
+        "page_range": "24-29",
+        "suggested_duration_mins": 35,
         "chapter_number": 3,
         "chapter_title": "हमारे आस-पास के पेड़ और पत्तियाँ",
         "topic": "पेड़ और पत्तियाँ",
@@ -29,8 +38,17 @@ JCERT_KNOWLEDGE_BASE = [
     },
     {
         "chunk_id": "JCERT_G1_MATH_01",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "West Singhbhum",
+        "block": "Chaibasa Sadar",
         "grade": "GRADE_1",
         "subject": "MATHEMATICS",
+        "competency_category": "FLN_NUMERACY",
+        "bloom_level": "REMEMBER",
+        "textbook_name": "गणित मेला (भाग 1)",
+        "page_range": "8-14",
+        "suggested_duration_mins": 30,
         "chapter_number": 1,
         "chapter_title": "गिनती और समूह बनाना (1 से 10)",
         "topic": "गिनती और संख्या ज्ञान",
@@ -38,235 +56,353 @@ JCERT_KNOWLEDGE_BASE = [
         "content_hindi": "वस्तुओं को गिनना और 10-10 के बंडल बनाना। एक (1), दो (2), तीन (3), चार (4), पाँच (5), छह (6), सात (7), आठ (8), नौ (9), दस (10)।",
         "cultural_keywords": ["गिनती", "बंडल", "महुआ", "तीर", "मटके", "हाट", "संख्या", "एक", "दो", "तीन"],
         "tribal_analogies": {
-            "SANTHALI": "ᱢᱤᱫ (Mit'), ᱵᱟᱨ (Bar), ᱯᱮ (Pe), ᱯᱩᱱ (Pun), ᱢᱚᱬᱮ (More) - ᱢᱟᱹᱦᱩᱣᱟᱹ ᱵᱤᱞᱤ ᱞᱮᱠᱷᱟ᱾",
-            "HO": "ᱢᱤᱭᱟᱫ (Miyad), ᱵᱟᱨᱤᱭᱟ (Bariya), ᱟᱯᱤᱭᱟ (Apiya), ᱩᱯᱩᱱᱤᱭᱟ (Upuniya), ᱢᱚᱬᱮᱭᱟ (Moreya) - ᱦᱟᱴ ᱨᱮ ᱴᱩᱠᱩᱡ᱾",
-            "MUNDARI": "मियाद (1), बारिया (2), आपिया (3), उपुनिया (4), मोड़ेया (5) - महुआ फल गिनना।"
+            "SANTHALI": "ᱢᱤᱫ (1), ᱵᱟᱨ (2), ᱯᱮ (3), ᱯᱩᱱ (4), ᱢᱚᱬᱮ (5), ᱛᱩᱨᱩᱭ (6), ᱮᱭᱟᱭ (7), ᱤᱨᱟᱹᱞ (8), ᱟᱨᱮ (9), ᱜᱮᱞ (10)᱾",
+            "HO": "ᱢᱤ (1), ᱵᱟᱨ (2), ᱟᱹᱯᱤ (3), ᱩᱯᱩᱱ (4), ᱢᱚᱬᱮ (5), ᱛᱩᱨᱩᱭ (6), ᱟᱹᱭ (7), ᱤᱨᱤᱞ (8), ᱟᱨᱮ (9), ᱜᱮᱞ (10)᱾",
+            "MUNDARI": "मियाद (1), बारिया (2), आपिया (3), उपुनिया (4), मोड़े (5), तुरूइ (6), एयाय (7), इराल (8), आरे (9), गेल (10)।"
         }
     },
     {
         "chunk_id": "JCERT_G3_FLN_01",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Khunti",
+        "block": "Torpa",
         "grade": "GRADE_3",
         "subject": "LANGUAGE_FLN",
+        "competency_category": "FLN_LITERACY",
+        "bloom_level": "UNDERSTAND",
+        "textbook_name": "भाषा मंजरी (भाग 3)",
+        "page_range": "18-22",
+        "suggested_duration_mins": 40,
         "chapter_number": 2,
-        "chapter_title": "जल संरक्षण और प्राकृतिक नदियां",
-        "topic": "जल और जल संरक्षण",
+        "chapter_title": "जल, नदियां और हमारा जीवन",
+        "topic": "जल और नदियां",
         "lo_code": "LO-FLN-G3-02",
-        "content_hindi": "जल ही जीवन है। नदियां, कुएं और झरने हमें पीने का स्वच्छ जल देते हैं। हमें पानी को व्यर्थ नहीं बहाना चाहिए।",
-        "cultural_keywords": ["पानी", "जल", "नदी", "झरना", "कुआं", "स्वच्छ", "दाग", "दाः", "संरक्षण"],
+        "content_hindi": "जल ही जीवन है। हमारे गांव में नदी, तालाब, कुआं और चापाकल से पीने का पानी मिलता है। हमें जल को प्रदूषित नहीं करना चाहिए और पानी बचाना चाहिए।",
+        "cultural_keywords": ["जल", "पानी", "नदी", "झरना", "दाः", "कुआं", "दाग", "स्वच्छ", "संरक्षण"],
         "tribal_analogies": {
-            "SANTHALI": "ᱫᱟᱜ (Dak') ᱫᱚ ᱡᱤᱣᱤ ᱠᱟᱱᱟ᱾ ᱡᱷᱟᱨᱱᱟ ᱟᱨ ᱜᱟᱰᱟ ᱠᱷᱚᱱ ᱥᱟᱯᱷᱟ ᱫᱟᱜ ᱧᱟᱢᱚᱜ-ᱟ᱾",
-            "HO": "ᱫᱟᱺ (Da:) ᱫᱚ ᱡᱤᱣᱤ ᱛᱟᱵᱩ᱾ ᱜᱟᱰᱟ ᱟᱨ ᱠᱩᱧ ᱠᱷᱚᱱ ᱥᱟᱯᱷᱟ ᱫᱟᱺ ᱵᱩ ᱧᱟᱢᱮᱭᱟ᱾",
-            "MUNDARI": "दाः (Da:) जीवन है। झरना और गड़ा से हमें निर्मल जल मिलता है।"
+            "SANTHALI": "ᱫᱟᱜ (Daah) ᱫᱚ ᱡᱤᱣᱤ ᱠᱟᱱᱟ᱾ ᱜᱟᱰᱟ ᱟᱨ ᱡᱷᱟᱨᱱᱟ ᱨᱮᱱᱟᱜ ᱥᱟᱯᱷᱟ ᱫᱟᱜ ᱵᱚᱱ ᱧᱩᱭᱟ᱾",
+            "HO": "ᱫᱟᱜ (Daah) ᱫᱚ ᱡᱤᱣᱤ ᱛᱟᱵᱚ᱾ ᱜᱟᱲᱟ ᱫᱟᱜ ᱥᱟᱯᱷᱟ ᱫᱚᱦᱚ ᱦᱩᱭᱩᱜ-ᱟ᱾",
+            "MUNDARI": "दाः (Daah) अबुआः जीवी ताना। गड़ा आर कुआं रेनाः सफा दाः नुइ दरकार।"
         }
     },
     {
         "chunk_id": "JCERT_G4_EVS_01",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Pakur",
+        "block": "Littipara",
         "grade": "GRADE_4",
         "subject": "ENVIRONMENTAL_STUDIES",
+        "competency_category": "EVS_ENVIRONMENT",
+        "bloom_level": "ANALYZE",
+        "textbook_name": "हमारी दुनिया (भाग 4)",
+        "page_range": "35-41",
+        "suggested_duration_mins": 40,
         "chapter_number": 5,
         "chapter_title": "पशु-पक्षी और उनका प्राकृतिक आवास",
-        "topic": "जंगली व पालतू जीव",
+        "topic": "पशु पक्षी और जंगल",
         "lo_code": "LO-EVS-G4-01",
-        "content_hindi": "जंगल में विभिन्न प्रकार के जंगली और पालतू जीव-जंतु रहते हैं जैसे हाथी, हिरण, मोर, गाय और बकरी। सभी जीव पर्यावरण संतुलन के लिए आवश्यक हैं।",
-        "cultural_keywords": ["जानवर", "पशु", "पक्षी", "हाथी", "मोर", "जंगल", "पर्यावरण", "हिरण", "बकरी"],
+        "content_hindi": "झारखंड के जंगलों में हाथी, हिरण, भालू, मोर और कई पक्षी रहते हैं। पालतू पशु जैसे गाय, बैल, बकरी खेती और दूध में हमारी मदद करते हैं।",
+        "cultural_keywords": ["जानवर", "पशु", "पक्षी", "हाथी", "मोर", "जंगल", "हिरण", "बैल", "गाय"],
         "tribal_analogies": {
-            "SANTHALI": "ᱦᱟᱹᱛᱤ (Hati), ᱡᱤᱞ (Jil/Deer), ᱢᱟᱨᱟᱜ (Marag/Peacock) ᱵᱤᱨ ᱨᱮᱠᱚ ᱛᱟᱦᱮᱸᱱᱟ᱾",
-            "HO": "ᱦᱟᱹᱛᱤ (Hati), ᱠᱩᱞ (Kul/Tiger), ᱢᱟᱨᱟᱜ (Marag) ᱵᱤᱨ ᱨᱮᱱ ᱡᱤᱣᱤ ᱠᱚ᱾",
-            "MUNDARI": "हाति (Elephant), कुल (Tiger), माराग (Peacock) जंगल के रक्षक हैं।"
+            "SANTHALI": "ᱵᱤᱨ ᱨᱮ ᱦᱟᱹᱛᱤ (Hati), ᱡᱤᱞ (Deer), ᱟᱨ ᱢᱟᱨᱟᱜ (Peacock) ᱠᱚ ᱛᱟᱦᱮᱸᱱᱟ᱾ ᱜᱟᱹᱭ ᱟᱨ ᱰᱟᱝᱜᱽᱨᱟ ᱟᱵᱚᱣᱟᱜ ᱜᱚᱲᱚ ᱠᱟᱱᱟ ᱠᱚ᱾",
+            "HO": "ᱵᱤᱨ ᱨᱮ ᱦᱟᱹᱛᱤ, ᱥᱤᱞᱤᱵᱽ (Deer), ᱟᱨ ᱢᱟᱨᱟᱝ (Peacock) ᱢᱮᱱᱟᱜ ᱠᱚᱣᱟ᱾ ᱩᱨᱤᱜ ᱟᱨ ᱜᱟᱹᱭ ᱥᱤᱭᱩᱜ ᱨᱮ ᱜᱚᱲᱚ ᱮᱢᱚᱜ-ᱟ᱾",
+            "MUNDARI": "बीर रे हाथी, सिलिब (Deer), आर माराः (Peacock) को मेनाकोवा। गाय आर काड़ा चास रे गोड़ो एमोअः।"
         }
     },
     {
         "chunk_id": "JCERT_G5_HERITAGE_01",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Ranchi",
+        "block": "Khunti / Bundu",
         "grade": "GRADE_5",
         "subject": "TRIBAL_HERITAGE",
+        "competency_category": "TRIBAL_HERITAGE",
+        "bloom_level": "EVALUATE",
+        "textbook_name": "झारखंडी संस्कृति एवं धरोहर",
+        "page_range": "1-12",
+        "suggested_duration_mins": 45,
         "chapter_number": 1,
         "chapter_title": "झारखंड के पारंपरिक लोकपर्व (सरहुल, करम, सोहराय)",
         "topic": "पारंपरिक लोकपर्व",
         "lo_code": "LO-HER-G5-01",
-        "content_hindi": "झारखंड की संस्कृति प्रकृति से जुड़ी है। सरहुल में प्रकृति का स्वागत होता है, करम में भाई-बहन के प्रेम और फसलों की रक्षा की कामना होती है, और सोहराय में पशुधन का वंदन किया जाता है।",
-        "cultural_keywords": ["सरहुल", "करम", "सोहराय", "संस्कृति", "परब", "अखड़ा", "मांदर", "त्योहार", "गीत"],
+        "content_hindi": "सरहुल प्रकृति पर्व है जिसमें सखुआ के फूलों की पूजा होती है। करम पर्व में करम डाली की पूजा और सोहराय में पशुधन की वंदना और भित्तिचित्र बनाए जाते हैं।",
+        "cultural_keywords": ["सरहुल", "करम", "सोहराय", "संस्कृति", "परब", "अखड़ा", "मांदर", "सखुआ", "फूल"],
         "tribal_analogies": {
-            "SANTHALI": "ᱵᱟᱦᱟ ᱯᱚᱨᱚᱵᱽ, ᱠᱟᱨᱟᱢ ᱟᱨ ᱥᱚᱦᱨᱟᱭ ᱫᱚ ᱟᱵᱚᱣᱟᱜ ᱢᱟᱨᱟᱝ ᱯᱚᱨᱚᱵᱽ ᱠᱟᱱᱟ᱾ ᱟᱠᱷᱲᱟ ᱨᱮ ᱛᱩᱢᱫᱟᱜ-ᱴᱟᱢᱟᱠ ᱨᱩᱭᱟ᱾",
-            "HO": "ᱢᱟᱜᱮ ᱯᱚᱨᱚᱵᱽ ᱟᱨ ᱵᱟ ᱯᱚᱨᱚᱵᱽ ᱨᱮ ᱫᱩᱨᱟᱝ ᱟᱨ ᱥᱩᱥᱩᱱ ᱦᱩᱭᱩᱜ-ᱟ᱾",
-            "MUNDARI": "सरहुल, करम और सोहराय मुंडा समाज के पावन पर्व हैं। अखड़ा में मांदर बजता है।"
+            "SANTHALI": "ᱵᱟᱦᱟ ᱟᱨ ᱥᱟᱨᱦᱩᱞ ᱯᱚᱨᱚᱵᱽ ᱨᱮ ᱢᱟᱸᱫᱟᱨ (Tamak/Tumdak) ᱨᱩ ᱟᱛᱮ ᱮᱱᱮᱡ ᱦᱩᱭᱩᱜ-ᱟ᱾ ᱥᱚᱦᱨᱟᱭ ᱨᱮ ᱜᱟᱹᱭ ᱠᱚ ᱥᱟᱡᱟᱣᱜ-ᱟ᱾",
+            "HO": "ᱢᱟᱜᱮ ᱟᱨ ᱵᱟᱦᱟ ᱯᱚᱨᱚᱵᱽ ᱨᱮ ᱫᱩᱨᱟᱹᱝ ᱟᱨ ᱥᱩᱥᱩᱱ ᱦᱩᱭᱩᱜ-ᱟ᱾ ᱥᱟᱨᱡᱚᱢ ᱵᱟᱦᱟ ᱛᱮ ᱥᱤᱝᱵᱚᱝᱜᱟ ᱯᱩᱡᱟᱹᱣᱜ-ᱟ᱾",
+            "MUNDARI": "बाहा आर सरहुल परब रे मांदर आर नगाड़ा रु साड़ा ते अखड़ा रे सुसुन हुयुअः।"
         }
     },
     {
         "chunk_id": "JCERT_G1_FLN_02",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Dumka",
+        "block": "Jarmundi",
         "grade": "GRADE_1",
         "subject": "LANGUAGE_FLN",
+        "competency_category": "FLN_LITERACY",
+        "bloom_level": "REMEMBER",
+        "textbook_name": "भाषा मंजरी (भाग 1)",
+        "page_range": "15-20",
+        "suggested_duration_mins": 30,
         "chapter_number": 4,
         "chapter_title": "हमारा प्यारा परिवार और घर",
-        "topic": "परिवार व रिश्ते",
+        "topic": "परिवार और घर",
         "lo_code": "LO-FLN-G1-04",
-        "content_hindi": "परिवार में माता, पिता, दादा, दादी, भाई और बहन सब मिलकर प्यार से रहते हैं। घर हमें सुरक्षा और स्नेह देता है।",
-        "cultural_keywords": ["परिवार", "घर", "माता", "पिता", "भाई", "बहन", "दादी", "दादा", "ओड़ाः"],
+        "content_hindi": "परिवार में माता, पिता, दादा, दादी, भाई और बहन एक साथ प्रेम से रहते हैं। हम घर में एक दूसरे के कार्यों में हाथ बंटाते हैं।",
+        "cultural_keywords": ["परिवार", "घर", "माता", "पिता", "भाई", "बहन", "ओड़ाः", "आयो", "बाबा"],
         "tribal_analogies": {
-            "SANTHALI": "ᱚᱲᱟᱜ (Orak'/Home) ᱨᱮ ᱟᱭᱳ, ᱵᱟᱵᱟ, ᱵᱚᱭᱦᱟ, ᱢᱤᱥᱤ ᱡᱚᱛᱚ ᱠᱚ ᱛᱟᱦᱮᱸᱱᱟ᱾",
-            "HO": "ᱚᱲᱟᱺ (Orah) ᱨᱮ ᱮᱝᱜᱟ, ᱟᱯᱟ, ᱦᱟᱜᱟ, ᱢᱤᱥᱤ ᱠᱚ ᱢᱮᱱᱟᱜ ᱠᱚᱣᱟ᱾",
-            "MUNDARI": "ओड़ाः में एंगा (माता), आपा (पिता), हागा (भाई) और मिसि (बहन) रहते हैं।"
+            "SANTHALI": "ᱚᱲᱟᱜ (Oṛag) ᱨᱮ ᱟᱭᱳ (Enga/Mayo), ᱵᱟᱵᱟ (Appa/Baba), ᱵᱚᱭᱦᱟ ᱟᱨ ᱢᱤᱥᱤ ᱢᱮᱱᱟᱜ ᱵᱚᱱᱟ᱾ ᱟᱵᱚ ᱡᱚᱛᱚ ᱦᱚᱲ ᱢᱤᱫ ᱛᱮ ᱵᱚᱱ ᱛᱟᱦᱮᱸᱱᱟ᱾",
+            "HO": "ᱚᱲᱟᱜ (Owa) ᱨᱮ ᱮᱸᱜᱟ, ᱟᱯᱯᱟ, ᱦᱟᱜᱟ ᱟᱨ ᱢᱤᱥᱤ ᱛᱟᱦᱮᱸᱱᱟ ᱠᱚ᱾",
+            "MUNDARI": "ओड़ाः रे एंगा, अप्पू, हागा आर मिसी दुलार ते को ताइन ताना।"
         }
     },
     {
         "chunk_id": "JCERT_G2_MATH_02",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "West Singhbhum",
+        "block": "Manoharpur",
         "grade": "GRADE_2",
         "subject": "MATHEMATICS",
+        "competency_category": "FLN_NUMERACY",
+        "bloom_level": "APPLY",
+        "textbook_name": "गणित मेला (भाग 2)",
+        "page_range": "42-49",
+        "suggested_duration_mins": 35,
         "chapter_number": 6,
         "chapter_title": "जोड़ और घटाव के सरल खेल",
         "topic": "जोड़ और घटाव",
         "lo_code": "LO-MATH-G2-06",
-        "content_hindi": "दुकान और हाट बाजार में वस्तुओं की खरीद-बिक्री में जोड़ और घटाव का उपयोग होता है। कंकड़ों और बीजों से जोड़ना आसान होता है।",
-        "cultural_keywords": ["जोड़", "घटाव", "कंकड़", "बीज", "हाट", "बाजार", "रुपये", "पैसे"],
+        "content_hindi": "हाट बाजार में वस्तुओं को खरीदना और बेचना। कंकड़ों, महुआ के बीजों और तीलियों की सहायता से जोड़ना (+) और घटाना (-) सीखना।",
+        "cultural_keywords": ["जोड़", "घटाव", "कंकड़", "बीज", "हाट", "बाजार", "रुपया", "हिसाब"],
         "tribal_analogies": {
-            "SANTHALI": "ᱢᱮᱥᱟ (Addition) ᱟᱨ ᱚᱪᱚᱜ (Subtraction) - ᱡᱟᱱᱦᱮ ᱟᱨ ᱢᱟᱹᱦᱩᱣᱟᱹ ᱡᱚ ᱛᱮ ᱪᱮᱫᱚᱜ᱾",
-            "HO": "ᱦᱟᱴ ᱨᱮ ᱯᱟᱭᱥᱟ ᱟᱨ ᱡᱚ ᱮᱢ-ᱦᱟᱛᱟᱣ ᱨᱮ ᱞᱮᱠᱷᱟ᱾",
-            "MUNDARI": "हाट में कंकड़ और इमली बीज से जोड़-घटाव सीखना।"
+            "SANTHALI": "ᱦᱟᱴ (Haat) ᱨᱮ ᱡᱤᱱᱤᱥ ᱠᱤᱨᱤᱧ ᱟᱹᱠᱷᱨᱤᱧ ᱨᱮ ᱞᱮᱠᱷᱟ (+) ᱟᱨ ᱜᱷᱟᱴᱟᱣ (-) ᱠᱟᱹᱢᱤ ᱞᱟᱜᱟᱜ-ᱟ᱾",
+            "HO": "ᱦᱟᱴ ᱨᱮ ᱡᱤᱱᱤᱥ ᱠᱤᱨᱤᱧ ᱨᱮ ᱢᱮᱥᱟ (+) ᱟᱨ ᱚᱪᱚ (-) ᱦᱩᱭᱩᱜ-ᱟ᱾",
+            "MUNDARI": "हाट रे सामान किरींग-अकिरींग रे जोड़ आर घटाव हिसाब बाइयोअः।"
         }
     },
     {
         "chunk_id": "JCERT_G3_EVS_02",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Khunti",
+        "block": "Murhu",
         "grade": "GRADE_3",
         "subject": "ENVIRONMENTAL_STUDIES",
+        "competency_category": "EVS_ENVIRONMENT",
+        "bloom_level": "UNDERSTAND",
+        "textbook_name": "हमारी दुनिया (भाग 3)",
+        "page_range": "50-56",
+        "suggested_duration_mins": 40,
         "chapter_number": 8,
         "chapter_title": "भोजन, अनाज और स्थानीय कृषि",
         "topic": "कृषि व अनाज",
         "lo_code": "LO-EVS-G3-08",
-        "content_hindi": "किसान खेतों में धान, मक्का, मड़ुआ, गोंदली और दालें उगाते हैं। मड़ुआ की रोटी और भात हमें ऊर्जा और पोषण देते हैं।",
-        "cultural_keywords": ["अनाज", "धान", "मक्का", "मड़ुआ", "गोंदली", "किसान", "खेत", "कृषि", "भात", "रोटी"],
+        "content_hindi": "झारखंड के खेतों में धान, मक्का, मड़ुआ, गोंदली और दालें उगाई जाती हैं। मड़ुआ की रोटी और साग-भात हमारे शरीर को शक्ति और पोषण देते हैं।",
+        "cultural_keywords": ["अनाज", "धान", "मक्का", "मड़ुआ", "गोंदली", "कृषि", "भोजन", "रोटी", "साग"],
         "tribal_analogies": {
-            "SANTHALI": "ᱦᱩᱲᱩ (Huru/Paddy), ᱜᱩᱱᱫᱽᱞᱤ (Gundli), ᱢᱟᱹᱱᱰᱤᱭᱟᱹ (Mandi/Rice) ᱟᱵᱚᱣᱟᱜ ᱢᱩᱬ ᱡᱚᱢᱟᱜ ᱠᱟᱱᱟ᱾",
-            "HO": "ᱵᱟᱵᱟ (Paddy), ᱡᱚᱱᱚᱲ (Corn), ᱢᱟᱹᱱᱰᱤ ᱡᱚᱢ ᱛᱮ ᱫᱟᱲᱮ ᱧᱟᱢᱚᱜ-ᱟ᱾",
-            "MUNDARI": "बाबा (धान), मड़ुआ और गोंदली हमारे खेतों का अमूल्य अन्न है।"
+            "SANTHALI": "ᱦᱩᱲᱩ (Hulu/Paddy), ᱡᱚᱱᱰᱨᱟ (Corn), ᱠᱳᱰᱮ (Mandua) ᱟᱨ ᱟᱲᱟᱜ-ᱫᱟᱠᱟ ᱟᱵᱚᱣᱟᱜ ᱥᱤᱵᱤᱞ ᱡᱚᱢᱟᱜ ᱠᱟᱱᱟ᱾",
+            "HO": "ᱵᱟᱵᱟ (Paddy), ᱡᱚᱱᱚᱲ (Corn), ᱠᱳᱰᱮ ᱟᱨ ᱟᱲᱟᱜ-ᱢᱟᱹᱱᱰᱤ ᱡᱚᱢ ᱛᱮ ᱦᱚᱲᱢᱚ ᱠᱮᱴᱮᱡᱚᱜ-ᱟ᱾",
+            "MUNDARI": "बाबा (Paddy), जोन्दरा, कोदे आर आड़ाः-मंडी अबुआः पारंपरिक आर पौष्टिक जोमाः ताना।"
         }
     },
     {
         "chunk_id": "JCERT_G4_FLN_03",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Pakur",
+        "block": "Amrapara",
         "grade": "GRADE_4",
         "subject": "LANGUAGE_FLN",
+        "competency_category": "FLN_LITERACY",
+        "bloom_level": "APPLY",
+        "textbook_name": "भाषा मंजरी (भाग 4)",
+        "page_range": "60-65",
+        "suggested_duration_mins": 35,
         "chapter_number": 7,
         "chapter_title": "स्वच्छता, स्वास्थ्य और योग",
-        "topic": "स्वच्छता व स्वास्थ्य",
+        "topic": "स्वच्छता और स्वास्थ्य",
         "lo_code": "LO-FLN-G4-03",
-        "content_hindi": "प्रतिदिन नीम या करंज की दातुन से दांत साफ करना, हाथ धोकर भोजन करना और साफ पानी पीना हमें स्वस्थ और निरोगी रखता है।",
-        "cultural_keywords": ["स्वच्छता", "स्वास्थ्य", "दातुन", "नीम", "करंज", "हाथ धोना", "साफ पानी"],
+        "content_hindi": "प्रतिदिन सुबह नीम या करंज की दातुन से दांत साफ करना चाहिए। भोजन से पहले साबुन या राख से हाथ धोना और साफ पानी पीना स्वस्थ रहने का नियम है।",
+        "cultural_keywords": ["स्वच्छता", "स्वास्थ्य", "दातुन", "नीम", "करंज", "हाथ धोना", "स्वच्छ जल"],
         "tribal_analogies": {
-            "SANTHALI": "ᱱᱤᱢ ᱫᱟᱹᱛᱩᱱ (Neem Datun) ᱟᱨ ᱥᱟᱯᱷᱟ ᱫᱟᱜ ᱛᱮ ᱦᱚᱲᱢᱚ ᱵᱮᱥ ᱛᱟᱦᱮᱸᱱᱟ᱾",
-            "HO": "ᱱᱤᱢ ᱫᱟᱹᱛᱩᱱ ᱛᱮ ᱰᱟᱴᱟ ᱥᱟᱯᱷᱟ ᱟᱨ ᱦᱚᱲᱢᱚ ᱨᱮᱭᱟᱜ ᱡᱚᱛᱚᱱ᱾",
-            "MUNDARI": "नीम दातुन और स्वच्छ जल से शरीर स्वस्थ रहता है।"
+            "SANTHALI": "ᱱᱤᱢ (Neem) ᱟᱨ ᱠᱟᱨᱟᱧᱡ (Karanj) ᱫᱟᱹᱛᱩᱱ (Datun) ᱛᱮ ᱰᱟᱴᱟ ᱥᱟᱯᱷᱟ ᱟᱨ ᱛᱤ ᱟᱹᱨᱩᱵ ᱦᱚᱲᱢᱚ ᱵᱮᱥ ᱛᱟᱦᱮᱸᱱᱟ᱾",
+            "HO": "ᱱᱤᱢ ᱫᱟᱹᱛᱩᱱ ᱛᱮ ᱰᱟᱴᱟ ᱡᱚᱫᱽ ᱟᱨ ᱛᱤ ᱟᱹᱵᱩᱝ ᱛᱮ ᱨᱩᱣᱟᱹ ᱵᱟᱝ ᱦᱩᱭᱩᱜ-ᱟ᱾",
+            "MUNDARI": "नीम दारू रेनाः दातुन ते डाटा सफा आर ती अरुब ते होड़मो बेस ताइना।"
         }
     },
     {
         "chunk_id": "JCERT_G5_EVS_03",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Ranchi",
+        "block": "Kanke",
         "grade": "GRADE_5",
         "subject": "ENVIRONMENTAL_STUDIES",
+        "competency_category": "SCIENCE_NATURE",
+        "bloom_level": "UNDERSTAND",
+        "textbook_name": "हमारी दुनिया (भाग 5)",
+        "page_range": "75-82",
+        "suggested_duration_mins": 45,
         "chapter_number": 11,
         "chapter_title": "सौरमंडल, सूर्य और पृथ्वी",
-        "topic": "सूर्य व सौरमंडल",
+        "topic": "सौरमंडल और सूर्य",
         "lo_code": "LO-EVS-G5-11",
-        "content_hindi": "सूर्य सौरमंडल का केंद्र है और हमें प्रकाश व ऊष्मा देता है। पृथ्वी सूर्य का चक्कर लगाती है जिससे दिन और रात होते हैं।",
-        "cultural_keywords": ["सूर्य", "पृथ्वी", "सौरमंडल", "प्रकाश", "दिन", "रात", "सिंगबोंगा", "सिंगी"],
+        "content_hindi": "सूर्य हमारे सौरमंडल का केंद्र है और सभी ग्रह उसके चारों ओर घूमते हैं। सूर्य से हमें प्रकाश और गर्मी मिलती है। पृथ्वी के घूमने से दिन और रात होते हैं।",
+        "cultural_keywords": ["सूर्य", "पृथ्वी", "सौरमंडल", "प्रकाश", "दिन", "रात", "सिंगबोंगा", "बेड़ा"],
         "tribal_analogies": {
-            "SANTHALI": "ᱥᱤᱝᱜᱤ (Singi/Sun) ᱫᱚ ᱫᱷᱟᱹᱨᱛᱤ ᱨᱤᱱᱤᱡ ᱡᱤᱣᱤ ᱫᱟᱛᱟ ᱠᱟᱱᱟᱭ᱾",
-            "HO": "ᱥᱤᱝᱵᱚᱝᱜᱟ (Singbonga) ᱥᱟᱨᱟ ᱫᱷᱟᱹᱨᱛᱤ ᱨᱮ ᱢᱟᱨᱥᱟᱞ ᱮᱢᱚᱜ-ᱟᱭ᱾",
-            "MUNDARI": "सिंगबोंगा (सूर्य) संपूर्ण संसार को जीवन और प्रकाश प्रदान करते हैं।"
+            "SANTHALI": "ᱵᱮᱲᱟ (Beda/Sun) ᱫᱚ ᱫᱷᱟᱹᱨᱛᱤ ᱨᱮ ᱢᱟᱨᱥᱟᱞ ᱟᱨ ᱞᱚᱞᱚ ᱮᱢᱚᱜ-ᱟᱭ᱾ ᱵᱮᱲᱟ ᱜᱮ ᱡᱤᱣᱤ ᱨᱮᱱ ᱢᱩᱬᱩᱛ ᱠᱟᱱᱟᱭ᱾",
+            "HO": "ᱥᱤᱝᱵᱚᱝᱜᱟ (Singbonga/Sun) ᱫᱚ ᱫᱷᱟᱹᱨᱛᱤ ᱨᱮ ᱢᱟᱨᱥᱟᱞ ᱮᱢᱚᱜ-ᱟ᱾ ᱩᱱᱤ ᱜᱮ ᱫᱤᱱ ᱟᱨ ᱧᱤᱫᱟᱹ ᱵᱮᱱᱟᱣᱤᱡ ᱠᱟᱱᱟᱭ᱾",
+            "MUNDARI": "सिंगबोंगा (Singbonga) अबुआः धरति रे प्रकाश आर ऊर्जा एमोअः।"
         }
     },
     {
         "chunk_id": "JCERT_G1_EVS_01",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Dumka",
+        "block": "Raneshwar",
         "grade": "GRADE_1",
         "subject": "ENVIRONMENTAL_STUDIES",
+        "competency_category": "EVS_ENVIRONMENT",
+        "bloom_level": "REMEMBER",
+        "textbook_name": "हमारी दुनिया (भाग 1)",
+        "page_range": "10-16",
+        "suggested_duration_mins": 30,
         "chapter_number": 2,
         "chapter_title": "हमारे शरीर के अंग और ज्ञानेंद्रियाँ",
         "topic": "शरीर के अंग",
         "lo_code": "LO-EVS-G1-02",
-        "content_hindi": "हमारे शरीर में आँख देखने के लिए, कान सुनने के लिए, नाक सूंघने के लिए, जीभ स्वाद के लिए और त्वचा छूने के लिए होती है। हाथ और पैर हमें कार्य करने में मदद करते हैं।",
-        "cultural_keywords": ["शरीर", "आँख", "कान", "नाक", "जीभ", "हाथ", "पैर", "मेद", "लुंतूर", "मू", "ती"],
+        "content_hindi": "हमारे शरीर में कई अंग होते हैं। आँख से देखते हैं, कान से सुनते हैं, नाक से सूंघते हैं, जीभ से स्वाद लेते हैं और हाथ से काम करते हैं।",
+        "cultural_keywords": ["शरीर", "अंग", "आँख", "कान", "नाक", "जीभ", "हाथ", "पैर", "मेत", "लुतुर"],
         "tribal_analogies": {
-            "SANTHALI": "ᱢᱮᱫ (Med/Eye), ᱞᱩᱛᱩᱨ (Lutur/Ear), ᱢᱩᱸ (Mu/Nose), ᱟᱞᱟᱝ (Alang/Tongue), ᱛᱤ (Ti/Hand) - ᱦᱚᱲᱢᱚ ᱨᱮᱱᱟᱜ ᱢᱩᱬ ᱦᱟᱹᱴᱤᱧ᱾",
-            "HO": "ᱢᱮᱫ (Med), ᱞᱩᱛᱩᱨ (Lutur), ᱢᱩ (Mu), ᱟᱞᱟᱝ (Alang), ᱛᱤ (Ti) - ᱦᱚᱲᱢᱚ ᱨᱮᱭᱟᱜ ᱦᱟᱹᱴᱤᱧ ᱠᱚ᱾",
-            "MUNDARI": "मेद (आँख), लुंतूर (कान), मू (नाक), अलंग (जीभ) और ती (हाथ) शरीर के प्रमुख अंग हैं।"
+            "SANTHALI": "ᱢᱮᱫ (Med/Eye), ᱞᱩᱛᱩᱨ (Lutur/Ear), ᱢᱩ (Mu/Nose), ᱟᱞᱟᱝ (Alang/Tongue), ᱛᱤ (Ti/Hand), ᱡᱟᱝᱜᱟ (Janga/Foot)᱾",
+            "HO": "ᱢᱮᱫ (Med), ᱞᱩᱛᱩᱨ (Lutur), ᱢᱩ (Mu), ᱞᱮᱸᱜᱮ (Tongue), ᱛᱤ (Ti), ᱠᱟᱴᱟ (Kata/Foot)᱾",
+            "MUNDARI": "मेद (Med), लुतुुर (Lutur), मू (Mu), अलंग (Tongue), ती (Ti), कट्टा (Foot)।"
         }
     },
     {
         "chunk_id": "JCERT_G2_FLN_02",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "West Singhbhum",
+        "block": "Jhinkpani",
         "grade": "GRADE_2",
         "subject": "LANGUAGE_FLN",
+        "competency_category": "FLN_LITERACY",
+        "bloom_level": "REMEMBER",
+        "textbook_name": "भाषा मंजरी (भाग 2)",
+        "page_range": "30-36",
+        "suggested_duration_mins": 35,
         "chapter_number": 5,
         "chapter_title": "दिनचर्या, खेलकूद और अच्छी आदतें",
-        "topic": "दिनचर्या व खेलकूद",
+        "topic": "दिनचर्या और खेल",
         "lo_code": "LO-FLN-G2-05",
-        "content_hindi": "प्रातःकाल सूर्योदय से पहले उठना, दातुन करना, स्वच्छ जल से स्नान करना, समय पर विद्यालय जाना और मित्रों के साथ पारंपरिक खेल खेलना हमारे मन और शरीर को प्रसन्न रखता है।",
-        "cultural_keywords": ["दिनचर्या", "सुबह", "विद्यालय", "खेलकूद", "आसड़ा", "इतुन", "मित्र", "गतिविधि"],
+        "content_hindi": "सुबह जल्दी उठना, माता-पिता को प्रणाम करना, दातुन करना, स्नान करना, समय पर विद्यालय जाना और शाम को मित्रों संग पारंपरिक खेल खेलना।",
+        "cultural_keywords": ["दिनचर्या", "सुबह", "विद्यालय", "खेलकूद", "आसड़ा", "इनांग", "सुसुन", "मित्र"],
         "tribal_analogies": {
-            "SANTHALI": "ᱥᱮᱛᱟᱜ ᱵᱮᱨᱮᱫ ᱠᱟᱛᱮ ᱟᱥᱲᱟ (School) ᱪᱟᱞᱟᱜ ᱟᱨ ᱜᱟᱛᱮ ᱠᱚ ᱥᱟᱶ ᱠᱷᱮᱞᱚᱸᱰ (Games)᱾",
-            "HO": "ᱥᱮᱛᱟᱜ ᱨᱮ ᱤᱛᱩᱱ ᱟᱥᱲᱟ ᱥᱮᱱᱚᱜ ᱟᱨ ᱡᱩᱨᱤ ᱠᱚ ᱥᱟᱞᱟᱜ ᱮᱱᱮᱡ᱾",
-            "MUNDARI": "सुबह इतुन आसड़ा (विद्यालय) जाना और दोस्तों के साथ खेलना।"
+            "SANTHALI": "ᱥᱮᱛᱟᱜ ᱵᱮᱨᱮᱫ, ᱟᱥᱲᱟ (Asda/School) ᱥᱮᱱᱚᱜ, ᱟᱨ ᱟᱹᱭᱩᱵ ᱜᱟᱛᱮ ᱠᱚ ᱥᱟᱶ ᱮᱱᱮᱡ (Play) ᱵᱮᱥ ᱦᱮᱵᱤᱴ ᱠᱟᱱᱟ᱾",
+            "HO": "ᱥᱮᱛᱟ ᱵᱤᱨᱤᱫ, ᱤᱛᱩᱱ ᱚᱲᱟᱜ (School) ᱥᱮᱱᱚᱜ ᱟᱨ ᱤᱱᱩᱝ (Play) ᱠᱟᱹᱢᱤ ᱵᱮᱥ ᱜᱮᱭᱟ᱾",
+            "MUNDARI": "सेता बिरिद, स्कूल सेन आर जोम-नु बाद गाते को सलोअः इनुंग (Play) बेस अभ्यास ताना।"
         }
     },
     {
         "chunk_id": "JCERT_G3_MATH_03",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Khunti",
+        "block": "Rania",
         "grade": "GRADE_3",
         "subject": "MATHEMATICS",
+        "competency_category": "FLN_NUMERACY",
+        "bloom_level": "APPLY",
+        "textbook_name": "गणित मेला (भाग 3)",
+        "page_range": "65-72",
+        "suggested_duration_mins": 40,
         "chapter_number": 9,
         "chapter_title": "माप और भार की पारंपरिक इकाइयां (पैला और कुड़ी)",
         "topic": "माप और भार",
         "lo_code": "LO-MATH-G3-04",
-        "content_hindi": "हाट और बाजारों में धान और अनाज नापने के लिए पारंपरिक पैला, कुड़ी और काठ का उपयोग होता है। मानक मापों में किलोग्राम और ग्राम का प्रयोग किया जाता है।",
-        "cultural_keywords": ["माप", "भार", "पैला", "कुड़ी", "तराजू", "वजन", "किलोग्राम", "ग्राम", "अनाज"],
+        "content_hindi": "झारखंड के हाट में अनाज नापने के लिए काठ का पैला और कुड़ी का उपयोग किया जाता है। आधुनिक मानक भार किलोग्राम (kg) और ग्राम (g) होता है।",
+        "cultural_keywords": ["माप", "भार", "पैला", "कुड़ी", "तराजू", "वजन", "किलोग्राम", "अनाज"],
         "tribal_analogies": {
-            "SANTHALI": "ᱦᱩᱲᱩ ᱡᱚᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱯᱟᱹᱭᱞᱟᱹ (Paila) ᱟᱨ ᱠᱟᱴᱷ (Kath) ᱵᱮᱵᱷᱟᱨᱚᱜ-ᱟ᱾",
-            "HO": "ᱦᱟᱴ ᱨᱮ ᱵᱟᱵᱟ ᱟᱨ ᱡᱚᱱᱚᱲ ᱡᱚᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱯᱟᱭᱞᱟ ᱨᱮᱭᱟᱜ ᱵᱮᱵᱷᱟᱨ᱾",
-            "MUNDARI": "धान और मक्का नापने के लिए पारंपरिक पैला का उपयोग किया जाता है।"
+            "SANTHALI": "ᱦᱩᱲᱩ ᱟᱨ ᱪᱟᱣᱞᱮ ᱯᱟᱹᱭᱞᱟᱹ (Paila) ᱛᱮ ᱡᱚᱠᱷᱟᱜ-ᱟ᱾ ᱒᱐ ᱯᱟᱹᱭᱞᱟᱹ ᱨᱮ ᱢᱤᱫ ᱠᱩᱲᱤ (Kuri) ᱦᱩᱭᱩᱜ-ᱟ᱾",
+            "HO": "ᱵᱟᱵᱟ ᱯᱟᱹᱭᱞᱟᱹ ᱛᱮ ᱛᱩᱞᱟᱹᱣᱜ-ᱟ᱾ ᱢᱤ ᱠᱩᱲᱤ ᱨᱮ ᱒᱐ ᱯᱟᱹᱭᱞᱟᱹ ᱛᱟᱦᱮᱸᱱᱟ᱾",
+            "MUNDARI": "बाबा पैला (Paila) ते माप हुयुअः। 20 पैला रे मियाद कुड़ी (Kuri) बाइयोअः।"
         }
     },
     {
         "chunk_id": "JCERT_G4_HERITAGE_02",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "Hazaribagh",
+        "block": "Barkagaon",
         "grade": "GRADE_4",
         "subject": "TRIBAL_HERITAGE",
+        "competency_category": "TRIBAL_HERITAGE",
+        "bloom_level": "APPLY",
+        "textbook_name": "झारखंड की लोक कलाएं",
+        "page_range": "25-34",
+        "suggested_duration_mins": 45,
         "chapter_number": 8,
         "chapter_title": "झारखंड की लोक कला और सोहराय पेंटिंग",
-        "topic": "लोक कला व सोहराय",
+        "topic": "सोहराय चित्रकला",
         "lo_code": "LO-HER-G4-02",
-        "content_hindi": "सोहराय और कोहबर चित्रकला में प्राकृतिक रंगों, लाल-काली मिट्टी और पत्तियों के रंगों से दीवारों पर पशु, पक्षी, वृक्ष और ज्यामितीय आकृतियां बनाई जाती हैं। यह प्रकृति के प्रति हमारे आदर को दर्शाती है।",
-        "cultural_keywords": ["सोहराय", "कोहबर", "चित्रकला", "भित्तिचित्र", "मिट्टी", "रंग", "कला", "प्रकृति"],
+        "content_hindi": "सोहराय और कोहबर झारखंड की प्रसिद्ध भित्तिचित्र कलाएं हैं। महिलाएं मिट्टी की दीवारों पर प्राकृतिक रंगों (लाल, काली, सफेद, पीली मिट्टी) से पशु, पक्षी और पेड़-पौधों के चित्र बनाती हैं।",
+        "cultural_keywords": ["सोहराय", "कोहबर", "चित्रकला", "भित्तिचित्र", "मिट्टी", "प्राकृतिक रंग", "पशु पक्षी"],
         "tribal_analogies": {
-            "SANTHALI": "ᱥᱚᱦᱨᱟᱭ ᱚᱠᱛᱚ ᱨᱮ ᱚᱲᱟᱜ ᱵᱷᱤᱛ ᱨᱮ ᱪᱮᱬᱮ, ᱫᱟᱨᱮ ᱟᱨ ᱡᱤᱣᱤ ᱠᱚᱣᱟᱜ ᱪᱤᱛᱟᱹᱨ ᱵᱮᱱᱟᱣᱜ-ᱟ᱾",
-            "HO": "ᱚᱲᱟᱺ ᱵᱷᱤᱛ ᱨᱮ ᱦᱟᱥᱟ ᱨᱚᱝ ᱛᱮ ᱥᱩᱱᱫᱚᱨ ᱪᱤᱛᱟᱹᱨ ᱵᱮᱱᱟᱣ᱾",
-            "MUNDARI": "सोहराय पर्व पर मिट्टी के प्राकृतिक रंगों से घरों की दीवारों पर भित्तिचित्र बनाए जाते हैं।"
+            "SANTHALI": "ᱥᱚᱦᱨᱟᱭ ᱨᱮ ᱚᱲᱟᱜ ᱠᱟᱸᱛ (Wall) ᱨᱮ ᱦᱟᱥᱟ (Earth color) ᱛᱮ ᱪᱮᱬᱮ ᱟᱨ ᱫᱟᱨᱮ ᱪᱤᱛᱟᱹᱨ ᱵᱮᱱᱟᱣᱜ-ᱟ᱾",
+            "HO": "ᱚᱣᱟ ᱠᱟᱸᱛ ᱨᱮ ᱦᱟᱥᱟ ᱨᱚᱝ ᱛᱮ ᱢᱟᱨᱟᱝ, ᱥᱤᱞᱤᱵᱽ ᱟᱨ ᱫᱟᱨᱩ ᱪᱤᱛᱟᱹᱨ ᱵᱟᱭᱚᱜ-ᱟ᱾",
+            "MUNDARI": "सोहराय रे ओड़ाः कांत रे हासा रंग ते सोहराय पेंटिंग आर चित्र बइयोअः।"
         }
     },
     {
         "chunk_id": "JCERT_G5_FLN_04",
+        "state": "JHARKHAND",
+        "board": "JCERT",
+        "district": "West Singhbhum",
+        "block": "Saranda Forest Division",
         "grade": "GRADE_5",
         "subject": "LANGUAGE_FLN",
+        "competency_category": "FLN_LITERACY",
+        "bloom_level": "EVALUATE",
+        "textbook_name": "भाषा मंजरी (भाग 5)",
+        "page_range": "90-98",
+        "suggested_duration_mins": 45,
         "chapter_number": 12,
         "chapter_title": "जंगल, पर्यावरण और हमारी पृथ्वी की रक्षा",
         "topic": "पर्यावरण रक्षा",
         "lo_code": "LO-FLN-G5-06",
-        "content_hindi": "जंगल हमारे फेफड़े हैं। वे हमें प्राणवायु (ऑक्सीजन), वर्षा, जड़ी-बूटियां और लकड़ियां देते हैं। वनों का संरक्षण करना हर नागरिक का कर्तव्य है।",
-        "cultural_keywords": ["जंगल", "पर्यावरण", "रक्षा", "वन", "ऑक्सीजन", "वर्षा", "जड़ी-बूटी", "संरक्षण"],
+        "content_hindi": "जंगल हमारे फेफड़े हैं। पेड़ हमें शुद्ध वायु (ऑक्सीजन) देते हैं, वर्षा लाते हैं और मिट्टी के कटाव को रोकते हैं। हमें जंगलों को कटने से बचाना है।",
+        "cultural_keywords": ["जंगल", "पर्यावरण", "रक्षा", "वन", "ऑक्सीजन", "वर्षा", "पेड़", "सारंडा"],
         "tribal_analogies": {
-            "SANTHALI": "ᱵᱤᱨ ᱫᱚ ᱟᱵᱚᱣᱟᱜ ᱡᱤᱣᱤ ᱠᱟᱱᱟ᱾ ᱫᱟᱨᱮ ᱜᱮᱫ ᱵᱚᱸᱫᱽ ᱠᱟᱛᱮ ᱵᱤᱨ ᱵᱟᱧᱪᱟᱣ ᱦᱩᱭᱩᱜ-ᱟ᱾",
-            "HO": "ᱵᱤᱨ-ᱫᱟᱨᱩ ᱫᱚ ᱟᱵᱩᱣᱟᱜ ᱡᱤᱣᱤ᱾ ᱵᱤᱨ ᱨᱮᱭᱟᱜ ᱡᱚᱛᱚᱱ ᱫᱚ ᱡᱚᱛᱚ ᱦᱚᱲᱟᱜ ᱠᱟᱹᱢᱤ᱾",
-            "MUNDARI": "बीर (जंगल) हमारी जीवनरेखा है। वन संरक्षण हमारी संस्कृति का मूल आधार है।"
+            "SANTHALI": "ᱵᱤᱨ (Forest) ᱫᱚ ᱟᱵᱚᱣᱟᱜ ᱡᱤᱣᱤ ᱠᱟᱱᱟ᱾ ᱫᱟᱨᱮ ᱵᱟᱝ ᱛᱟᱦᱮᱸᱱ ᱠᱷᱟᱱ ᱫᱟᱜ ᱟᱨ ᱦᱚᱭ ᱵᱟᱭ ᱧᱟᱢᱚᱜ-ᱟ᱾ ᱵᱤᱨ ᱵᱟᱧᱪᱟᱣ ᱢᱟ᱾",
+            "HO": "ᱵᱤᱨ ᱫᱚ ᱡᱤᱣᱤ ᱛᱟᱵᱚ᱾ ᱥᱟᱨᱟᱱᱰᱟ ᱵᱤᱨ ᱫᱚ ᱫᱷᱟᱹᱨᱛᱤ ᱨᱮᱱᱟᱜ ᱥᱟᱦᱮᱫ ᱠᱟᱱᱟ᱾ ᱵᱤᱨ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱫᱚᱦᱚ ᱦᱩᱭᱩᱜ-ᱟ᱾",
+            "MUNDARI": "बीर अबुआः जीवी ताना। सारंडा बीर आर दारू को बचाओ दरकार जेनाते सफा हवा आर दाः मिलोअः।"
         }
     }
 ]
 
-# --- Domain Concept Centroids for Dense Semantic Embeddings ---
-CONCEPT_CENTROIDS = {
-    "botany_nature": ["साल", "सखुआ", "पेड़", "जंगल", "पौधे", "पत्तियां", "महुआ", "प्रकृति", "पर्यावरण", "छांव", "sarjom", "dare", "sakam", "ᱫᱟᱨᱮ", "ᱥᱟᱠᱟᱢ"],
-    "math_numeracy": ["गिनती", "संख्या", "गणना", "जोड़", "घटाव", "बीज", "कंकड़", "बंडल", "हाट", "मियाद", "बारिया", "आपिया", "mit", "bar", "pe", "ᱞᱮᱠᱷᱟ"],
-    "water_ecology": ["पानी", "जल", "नदी", "झरना", "कुआं", "तालाब", "स्वच्छ", "संरक्षण", "दाग", "दाः", "गाडा", "dak", "da", "ᱫᱟᱜ", "ᱜᱟᱰᱟ"],
-    "animals_fauna": ["जानवर", "पशु", "पक्षी", "हाथी", "मोर", "हिरण", "बाघ", "बकरी", "गाय", "hati", "marag", "jil", "ᱦᱟᱹᱛᱤ", "ᱢᱟᱨᱟᱜ"],
-    "culture_heritage": ["सरहुल", "करम", "सोहराय", "कोहबर", "संस्कृति", "परब", "त्योहार", "अखड़ा", "मांदर", "जाहेरथान", "baha", "porob", "sohrai", "karam", "ᱵᱟᱦᱟ"],
-    "family_home": ["परिवार", "घर", "माता", "पिता", "भाई", "बहन", "दादा", "दादी", "ओड़ाः", "ओड़ाग", "enga", "apa", "haga", "misi", "orak", "orah"],
-    "food_agriculture": ["अनाज", "धान", "मक्का", "मड़ुआ", "गोंदली", "किसान", "खेत", "भात", "रोटी", "huru", "baba", "mandi"],
-    "health_hygiene": ["स्वच्छता", "स्वास्थ्य", "दातुन", "नीम", "करंज", "हाथ धोना", "सफाई", "दिनचर्या", "datun", "neem"],
-    "astronomy_sun": ["सूर्य", "पृथ्वी", "सौरमंडल", "प्रकाश", "दिन", "रात", "सिंगबोंगा", "सिंगी", "singi", "singbonga"],
-    "body_anatomy": ["शरीर", "अंग", "आँख", "कान", "नाक", "जीभ", "हाथ", "पैर", "ज्ञानेंद्रियाँ", "med", "lutur", "mu", "alang", "ti", "ᱛᱤ", "ᱢᱮᱫ"],
-    "measurement_units": ["माप", "भार", "पैला", "कुड़ी", "काठ", "तराजू", "वजन", "किलोग्राम", "ग्राम", "paila", "kath", "ᱯᱟᱹᱭᱞᱟᱹ"]
+# --- Dense Semantic Concept Centroids ---
+SEMANTIC_CONCEPT_CENTROIDS = {
+    "BOTANY_PLANTS": ["पेड़", "पत्ती", "साल", "सखुआ", "महुआ", "करम", "दातुन", "नीम", "पौधा", "जंगल", "सारंडा", "वन"],
+    "NUMERACY_MATH": ["गिनती", "संख्या", "जोड़", "घटाव", "बंडल", "माप", "भार", "पैला", "कुड़ी", "तराजू", "वजन", "रुपया"],
+    "HYDROLOGY_WATER": ["जल", "पानी", "नदी", "झरना", "तालाब", "कुआं", "दाः", "दाग", "स्वच्छ", "संरक्षण"],
+    "ZOOLOGY_FAUNA": ["जानवर", "पशु", "पक्षी", "हाथी", "मोर", "हिरण", "बैल", "गाय", "पालतू", "जंगली"],
+    "CULTURE_FESTIVALS": ["सरहुल", "करम", "सोहराय", "संस्कृति", "परब", "अखड़ा", "मांदर", "सखुआ", "फूल", "कोहबर"],
+    "FAMILY_SOCIETY": ["परिवार", "घर", "माता", "पिता", "भाई", "बहन", "ओड़ाः", "दादा", "दादी"],
+    "AGRICULTURE_FOOD": ["अनाज", "धान", "मक्का", "मड़ुआ", "गोंदली", "कृषि", "भोजन", "रोटी", "साग", "पोषण"],
+    "HYGIENE_HEALTH": ["स्वच्छता", "स्वास्थ्य", "दातुन", "नीम", "करंज", "हाथ धोना", "दांत"],
+    "ASTRONOMY_SPACE": ["सूर्य", "पृथ्वी", "सौरमंडल", "प्रकाश", "दिन", "रात", "सिंगबोंगा", "ऊर्जा"],
+    "ANATOMY_SENSES": ["शरीर", "अंग", "आँख", "कान", "नाक", "जीभ", "हाथ", "पैर", "ज्ञानेंद्रियाँ"],
+    "ART_FOLK": ["सोहराय", "कोहबर", "चित्रकला", "भित्तिचित्र", "मिट्टी", "प्राकृतिक रंग", "पेंटिंग"]
 }
+
 
 class FineTunedHybridRagEngine:
     """Production-grade hybrid RAG engine with Okapi BM25, 128-dim dense semantic vectorizer, RRF, and Cross-Encoder Reranking."""
@@ -289,53 +425,56 @@ class FineTunedHybridRagEngine:
         self.doc_freqs: Dict[str, int] = {}
         
         for doc in self.corpus:
-            combined_text = f"{doc['topic']} {doc['chapter_title']} {doc['content_hindi']} {' '.join(doc['cultural_keywords'])} {doc['lo_code']}"
+            combined_text = f"{doc['topic']} {doc['chapter_title']} {doc['content_hindi']} {' '.join(doc['cultural_keywords'])} {doc['lo_code']} {doc.get('district', '')} {doc.get('competency_category', '')}"
             tokens = self._tokenize(combined_text)
             self.doc_tokens.append(tokens)
             self.doc_lengths.append(len(tokens))
             
-            unique_terms = set(tokens)
-            for t in unique_terms:
-                self.doc_freqs[t] = self.doc_freqs.get(t, 0) + 1
-                
-        self.N = len(self.corpus)
-        self.avg_dl = sum(self.doc_lengths) / max(self.N, 1)
+            unique_tokens = set(tokens)
+            for token in unique_tokens:
+                self.doc_freqs[token] = self.doc_freqs.get(token, 0) + 1
+
+        self.avg_doc_len = sum(self.doc_lengths) / max(len(self.doc_lengths), 1)
+        self.num_docs = len(self.corpus)
+
+        # Precompute dense embeddings
+        self.doc_embeddings = [self._embed_text(
+            f"{doc['topic']} {doc['chapter_title']} {doc['content_hindi']} {' '.join(doc['cultural_keywords'])}"
+        ) for doc in self.corpus]
 
     def _compute_bm25_score(self, query_tokens: List[str], doc_idx: int) -> float:
-        if not query_tokens:
-            return 0.0
-        
         score = 0.0
-        doc_tokens = self.doc_tokens[doc_idx]
         doc_len = self.doc_lengths[doc_idx]
-        term_counts: Dict[str, int] = {}
-        for t in doc_tokens:
-            term_counts[t] = term_counts.get(t, 0) + 1
+        tokens_in_doc = self.doc_tokens[doc_idx]
+        token_counts: Dict[str, int] = {}
+        for t in tokens_in_doc:
+            token_counts[t] = token_counts.get(t, 0) + 1
+
+        for q_token in query_tokens:
+            if q_token not in self.doc_freqs:
+                continue
+            df = self.doc_freqs[q_token]
+            idf = math.log(1.0 + (self.num_docs - df + 0.5) / (df + 0.5))
             
-        for q in query_tokens:
-            if q in term_counts:
-                tf = term_counts[q]
-                df = self.doc_freqs.get(q, 1)
-                idf = math.log(1.0 + ((self.N - df + 0.5) / (df + 0.5)))
-                numerator = tf * (self.k1 + 1.0)
-                denominator = tf + (self.k1 * (1.0 - self.b + (self.b * (doc_len / self.avg_dl))))
-                score += idf * (numerator / denominator)
-                
-        return max(0.0, score)
+            tf = token_counts.get(q_token, 0)
+            numerator = tf * (self.k1 + 1.0)
+            denominator = tf + self.k1 * (1.0 - self.b + self.b * (doc_len / self.avg_doc_len))
+            score += idf * (numerator / denominator)
+
+        return round(score, 4)
 
     def _embed_text(self, text: str) -> List[float]:
         vector = [0.0] * self.vector_dim
         tokens = self._tokenize(text)
-        if not tokens:
-            return vector
+        token_set = set(tokens)
 
-        # Concept Centroid Projection
-        for centroid_idx, (_, keywords) in enumerate(CONCEPT_CENTROIDS.items()):
-            overlap = sum(1 for t in tokens if any(kw in t or t in kw for kw in keywords))
+        # Centroid projections
+        for c_idx, (concept, terms) in enumerate(SEMANTIC_CONCEPT_CENTROIDS.items()):
+            overlap = len(token_set.intersection(set(terms)))
             if overlap > 0:
-                weight = min(1.0, overlap * 0.4)
-                base_slot = (centroid_idx * 11) % self.vector_dim
-                for offset in range(10):
+                weight = overlap / len(terms)
+                base_slot = (c_idx * 11) % self.vector_dim
+                for offset in range(5):
                     slot = (base_slot + offset) % self.vector_dim
                     vector[slot] += weight * (1.0 / (offset + 1))
 
@@ -391,6 +530,9 @@ class FineTunedHybridRagEngine:
         query: str,
         grade: Optional[str] = None,
         subject: Optional[str] = None,
+        district: Optional[str] = None,
+        bloom_level: Optional[str] = None,
+        competency_category: Optional[str] = None,
         top_k: int = 3
     ) -> List[Dict[str, Any]]:
         query_tokens = self._tokenize(query)
@@ -398,42 +540,58 @@ class FineTunedHybridRagEngine:
         
         scored_candidates = []
         for idx, doc in enumerate(self.corpus):
-            # Metadata Filter hard-scoping
+            # Optional metadata filters
             if grade and doc["grade"] != grade:
                 continue
             if subject and doc["subject"] != subject:
                 continue
+            if district and doc.get("district", "").lower() != district.lower():
+                continue
+            if bloom_level and doc.get("bloom_level") != bloom_level:
+                continue
+            if competency_category and doc.get("competency_category") != competency_category:
+                continue
 
-            bm25_raw = self._compute_bm25_score(query_tokens, idx)
-            doc_vector = self._embed_text(f"{doc['topic']} {doc['content_hindi']} {doc['lo_code']}")
-            dense_sim = self._cosine_similarity(query_vector, doc_vector)
-
-            # Normalized Reciprocal Rank Fusion (RRF)
-            rrf_score = (1.0 / (60.0 + (1.0 / (bm25_raw + 0.01)))) + (1.0 / (60.0 + (1.0 / (dense_sim + 0.01))))
+            bm25_score = self._compute_bm25_score(query_tokens, idx)
+            cos_sim = self._cosine_similarity(query_vector, self.doc_embeddings[idx])
+            rrf_score = (1.0 / (60.0 + max(0.0, 10.0 - bm25_score))) + (cos_sim * 0.6)
             
-            # Cross-encoder Reranker pass
-            final_rerank_score = self._cross_encoder_rerank(query, doc, rrf_score)
-
-            matched_kws = [kw for kw in doc["cultural_keywords"] if kw.lower() in query.lower()]
-
+            rerank_score = self._cross_encoder_rerank(query, doc, rrf_score)
+            
             scored_candidates.append({
+                "doc_idx": idx,
                 "chunk": doc,
-                "bm25_score": round(bm25_raw, 3),
-                "dense_score": round(dense_sim, 3),
-                "rrf_score": round(rrf_score, 5),
-                "rerank_score": final_rerank_score,
-                "matched_keywords": matched_kws,
-                "provenance": {
-                    "chunk_id": doc["chunk_id"],
-                    "lo_code": doc["lo_code"],
-                    "chapter_title": doc["chapter_title"],
-                    "topic": doc["topic"]
-                }
+                "bm25_score": bm25_score,
+                "cosine_sim": round(cos_sim, 4),
+                "rrf_score": round(rrf_score, 4),
+                "rerank_score": rerank_score
             })
 
-        # Rank by cross-encoder rerank score
         scored_candidates.sort(key=lambda x: x["rerank_score"], reverse=True)
-        return scored_candidates[:top_k]
+        top_results = scored_candidates[:top_k]
 
-# Global singleton instance
+        return [
+            {
+                "chunk": res["chunk"],
+                "bm25_score": res["bm25_score"],
+                "cosine_similarity": res["cosine_sim"],
+                "rerank_score": res["rerank_score"],
+                "provenance": {
+                    "source": "JCERT_JHARKHAND_CURRICULUM_CORPUS_v3",
+                    "chunk_id": res["chunk"]["chunk_id"],
+                    "lo_code": res["chunk"]["lo_code"],
+                    "grade": res["chunk"]["grade"],
+                    "subject": res["chunk"]["subject"],
+                    "district": res["chunk"].get("district", "JHARKHAND_STATE"),
+                    "textbook_name": res["chunk"].get("textbook_name", ""),
+                    "page_range": res["chunk"].get("page_range", ""),
+                    "bloom_level": res["chunk"].get("bloom_level", "UNDERSTAND"),
+                    "competency_category": res["chunk"].get("competency_category", "EVS_ENVIRONMENT"),
+                    "retrieval_method": "HYBRID_BM25_DENSE_RRF_CROSS_ENCODER"
+                }
+            }
+            for res in top_results
+        ]
+
+# Singleton instance
 rag_engine = FineTunedHybridRagEngine()

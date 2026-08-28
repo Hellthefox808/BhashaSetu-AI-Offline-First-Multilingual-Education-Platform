@@ -9,6 +9,8 @@ export type TargetLanguageCode = 'sat_Olck' | 'hoc_Wara' | 'unr_Deva' | 'hin_Dev
 export type ScriptType = 'OL_CHIKI' | 'WARANG_CHITI' | 'DEVANAGARI' | 'LATIN_TRANSLITERATION';
 export type GradeLevel = 'GRADE_1' | 'GRADE_2' | 'GRADE_3' | 'GRADE_4' | 'GRADE_5';
 export type Subject = 'LANGUAGE_FLN' | 'MATHEMATICS' | 'ENVIRONMENTAL_STUDIES' | 'TRIBAL_HERITAGE';
+export type BloomTaxonomyLevel = 'REMEMBER' | 'UNDERSTAND' | 'APPLY' | 'ANALYZE' | 'EVALUATE';
+export type CompetencyCategory = 'FLN_NUMERACY' | 'FLN_LITERACY' | 'EVS_ENVIRONMENT' | 'TRIBAL_HERITAGE' | 'SCIENCE_NATURE';
 
 export type LessonStatus = 
   | 'DRAFT' 
@@ -24,14 +26,43 @@ export type QualityStatus =
   | 'LOW_CONFIDENCE' 
   | 'REJECTED';
 
+export interface AudioMetadata {
+  sampleRateHz: number;
+  channels: 1 | 2;
+  bitrateKbps: number;
+  codec: 'MP3' | 'OPUS' | 'PCM_16';
+  voiceSpeakerModel: string;
+  durationMs: number;
+  loudnessLufs: number;
+}
+
+export interface TelemetrySpanMetadata {
+  traceId: string;
+  spanId: string;
+  parentSpanId?: string;
+  serviceName: string;
+  operationName: string;
+  startTimeUnixNano: number;
+  durationMs: number;
+  statusCode: 'OK' | 'ERROR';
+  attributes: Record<string, string | number | boolean>;
+}
+
 export interface CurriculumNode {
   id: string;
   state: 'JHARKHAND';
   board: 'JCERT';
+  district?: string;
+  block?: string;
   grade: GradeLevel;
   subject: Subject;
   chapterNumber: number;
   chapterTitle: string;
+  textbookName?: string;
+  pageRange?: string;
+  competencyCategory?: CompetencyCategory;
+  bloomTaxonomyLevel?: BloomTaxonomyLevel;
+  suggestedDurationMinutes?: number;
   learningOutcomeCode: string;
   learningOutcomeDescription: string;
   hindiConceptSummary: string;
@@ -43,6 +74,8 @@ export interface QualityReport {
   cometScore: number;
   terminologyScore: number;
   groundingScore: number;
+  chrfScore?: number;
+  hallucinationRiskScore?: number;
   status: QualityStatus;
   decision?: 'AUTO_PUBLISH_CANDIDATE' | 'TEACHER_REVIEW_REQUIRED' | 'RETRY_ESCALATE';
   detectedErrorSpans?: Array<{
@@ -65,6 +98,7 @@ export interface PedagogicalAdaptation {
   culturalAnalogy: string;
   localStoryContext: string;
   audioTtsUrl?: string;
+  audioMetadata?: AudioMetadata;
 }
 
 export interface Lesson {
@@ -106,9 +140,11 @@ export interface VoiceTranslateResponse {
   script: ScriptType;
   phoneticTransliteration: string;
   audioTtsBase64?: string;
+  audioMetadata?: AudioMetadata;
   latencyBreakdownMs: LatencyBreakdown;
   qualityReport: QualityReport;
   slaCompliant: boolean;
+  telemetrySpan?: TelemetrySpanMetadata;
 }
 
 export interface AssessmentQuestion {
@@ -118,6 +154,7 @@ export interface AssessmentQuestion {
   options: string[];
   correctOptionIndex: number;
   audioPromptUrl?: string;
+  bloomLevel?: BloomTaxonomyLevel;
 }
 
 export interface AssessmentAttempt {
@@ -200,6 +237,9 @@ export interface HardwareState {
   batteryPercentage: number;
   isCharging: boolean;
   networkState: 'OFFLINE' | '2G_3G' | '4G_WIFI';
+  signalStrengthDbm?: number;
+  diskFreeMb?: number;
+  cpuLoadPercent?: number;
   targetExecutionEnvironment: 'EDGE' | 'LOCAL_LAN' | 'CLOUD';
 }
 

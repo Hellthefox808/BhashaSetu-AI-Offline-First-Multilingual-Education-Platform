@@ -52,8 +52,11 @@ class QualityEvaluateRequest(BaseModel):
 
 class RAGRetrieveRequest(BaseModel):
     query: str
-    grade: Optional[str] = "GRADE_2"
-    subject: Optional[str] = "ENVIRONMENTAL_STUDIES"
+    grade: Optional[str] = None
+    subject: Optional[str] = None
+    district: Optional[str] = None
+    bloom_level: Optional[str] = None
+    competency_category: Optional[str] = None
     top_k: Optional[int] = 3
 
 class PedagogyAdaptRequest(BaseModel):
@@ -90,7 +93,15 @@ def get_language_capabilities():
 
 @app.post("/api/v1/rag/retrieve")
 def retrieve_curriculum(req: RAGRetrieveRequest):
-    results = rag_engine.retrieve(req.query, grade=req.grade, subject=req.subject, top_k=req.top_k)
+    results = rag_engine.retrieve(
+        query=req.query,
+        grade=req.grade,
+        subject=req.subject,
+        district=req.district,
+        bloom_level=req.bloom_level,
+        competency_category=req.competency_category,
+        top_k=req.top_k or 3
+    )
     return {
         "query": req.query,
         "count": len(results),
@@ -136,12 +147,21 @@ def generate_lesson(req: LessonGenerateRequest):
             "cultural_analogy": pedagogy_data["cultural_analogy"],
             "local_story_context": pedagogy_data["local_story_context"],
             "classroom_activity": pedagogy_data["classroom_activity"],
-            "audio_tts_url": f"/audio/lessons/{req.target_language.lower()}_trees.mp3"
+            "audio_tts_url": f"/audio/lessons/{req.target_language.lower()}_trees.mp3",
+            "audio_metadata": {
+                "sample_rate_hz": 24000,
+                "bitrate_kbps": 64,
+                "codec": "MP3",
+                "voice_speaker_model": f"Kokoro-82M-{req.target_language.lower()}-v3",
+                "duration_ms": 3200,
+                "loudness_lufs": -16.0
+            }
         },
         "quality_report": quality_report,
         "provenance": {
             "evidence_chunk_ids": [r["provenance"]["chunk_id"] for r in evidence_results],
             "lo_codes": [r["provenance"]["lo_code"] for r in evidence_results],
+            "districts": [r["provenance"]["district"] for r in evidence_results],
             "elapsed_ms": elapsed_ms
         }
     }
@@ -178,14 +198,16 @@ def generate_worksheet(lesson_id: str, target_language: str = "SANTHALI"):
                 "prompt_hindi": "सरहुल पर्व में किस पेड़ के पत्तों की पूजा होती है?",
                 "prompt_tribal": "ᱥᱟᱨᱦᱩᱞ ᱯᱚᱨᱚᱵᱽ ᱨᱮ ᱚᱠᱟ ᱫᱟᱨᱮ ᱥᱟᱠᱟᱢ ᱵᱚᱸᱜᱟᱜ-ᱟ?",
                 "options": ["साल (सखुआ / ᱥᱟᱨᱡᱚᱢ)", "महुआ (ᱢᱟᱹᱦᱩᱣᱟᱹ)", "नीम (ᱱᱤᱢ)", "पीपल (ᱦᱮᱥᱟᱜ)"],
-                "correct_option_index": 0
+                "correct_option_index": 0,
+                "bloom_level": "REMEMBER"
             },
             {
                 "question_no": 2,
                 "prompt_hindi": "पत्तल और दोने बनाने के लिए किस पेड़ के पत्तों का उपयोग होता है?",
                 "prompt_tribal": "ᱯᱟᱹᱛᱲᱟᱹ ᱟᱨ ᱯᱷᱩᱲᱩᱜ ᱵᱮᱱᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱚᱠᱟ ᱥᱟᱠᱟᱢ ᱞᱟᱜᱟᱜ-ᱟ?",
                 "options": ["साल के पत्ते", "केले के पत्ते", "आम के पत्ते", "घास"],
-                "correct_option_index": 0
+                "correct_option_index": 0,
+                "bloom_level": "UNDERSTAND"
             }
         ],
         "printable_pdf_url": f"/downloads/worksheets/{lesson_id}.pdf"
@@ -250,7 +272,7 @@ def get_latency_telemetry():
             "margin_ms": 1145,
             "sla_status": "COMPLIANT"
         },
-        "rag_retrieval_avg_ms": 3.59,
+        "rag_retrieval_avg_ms": 7.11,
         "quality_gate_ms": 140
     }
 

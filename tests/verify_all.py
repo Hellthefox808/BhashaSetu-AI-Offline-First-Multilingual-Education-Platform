@@ -1,16 +1,17 @@
 """
 BhashaSetu AI (भाषासेतु) — Master End-to-End Test & Verification Suite (v3.0.0-PROD)
 Comprehensive testing across all subsystems:
-1. JCERT 15-Node Curriculum Knowledge Base Integrity (Grades 1-5)
+1. JCERT 15-Node Curriculum Knowledge Base with Enriched Educational Metadata (Grades 1-5)
 2. Fine-Tuned Hybrid RAG Retrieval (BM25 + 128-dim Semantic Vectorizer + RRF + Cross-Encoder)
 3. Multilingual Translation & Authentic Native Scripts (Ol Chiki, Warang Chiti, Devanagari)
 4. Case-Insensitive Language Code Aliases (sat, hoc, unr, santhali, ho, mundari)
 5. Pedagogical Cultural Analogy Invariant Preservation
 6. Automated COMET Quality Scoring & MQM Error Span Tagger
-7. Live Voice Latency Budget Validation (<= 3000ms SLA)
+7. Live Voice Latency Budget (<= 3000ms SLA) + Audio Metadata & Telemetry Spans
 8. Outbox Synchronization Idempotency & Replay Drop
 9. Live FastAPI Application Endpoints via TestClient (9 endpoints)
-10. Web Backend Enterprise Architecture & Domain Modules Integrity (Auth, Curriculum, Lessons, Sync, Analytics, Devices, Reviews, Offline-Packs, Audit)
+10. Web Backend Enterprise Architecture & Domain Modules Integrity (9 domain modules)
+11. Educational Metadata Filtering & Provenance Verification
 """
 
 import sys
@@ -38,18 +39,21 @@ class TestBhashaSetuComprehensive(unittest.TestCase):
         cls.client = TestClient(app)
 
     def test_01_jcert_knowledge_base_integrity(self):
-        """Assert that all 15 JCERT curriculum chunks contain required metadata, LO codes, and analogies."""
+        """Assert that all 15 JCERT curriculum chunks contain required educational metadata, LO codes, and analogies."""
         self.assertGreaterEqual(len(JCERT_KNOWLEDGE_BASE), 15)
         for chunk in JCERT_KNOWLEDGE_BASE:
             self.assertIn("chunk_id", chunk)
             self.assertIn("lo_code", chunk)
             self.assertIn("grade", chunk)
             self.assertIn("subject", chunk)
+            self.assertIn("district", chunk)
+            self.assertIn("bloom_level", chunk)
+            self.assertIn("competency_category", chunk)
             self.assertIn("tribal_analogies", chunk)
             self.assertIn("SANTHALI", chunk["tribal_analogies"])
             self.assertIn("HO", chunk["tribal_analogies"])
             self.assertIn("MUNDARI", chunk["tribal_analogies"])
-        print(f"[PASS] Test 01: JCERT Knowledge Base ({len(JCERT_KNOWLEDGE_BASE)} nodes across Grades 1-5) verified.")
+        print(f"[PASS] Test 01: JCERT Knowledge Base (15 nodes with complete educational metadata) verified.")
 
     def test_02_fine_tuned_hybrid_rag_retrieval(self):
         """Assert that hybrid RAG returns correct curriculum evidence with provenance and high rerank score."""
@@ -111,13 +115,17 @@ class TestBhashaSetuComprehensive(unittest.TestCase):
         print(f"[PASS] Test 06: Quality evaluation score {qe['composite_score']} (Decision: {qe['decision']}).")
 
     def test_07_voice_pipeline_latency_budget(self):
-        """Assert that live voice dialogue meets the sub-3-second target latency budget."""
+        """Assert that live voice dialogue meets the sub-3-second target latency budget and contains audio metadata & telemetry spans."""
         voice_res = voice_pipeline.process_voice_turn("बच्चों, अपनी किताब खोलो", "SANTHALI")
         breakdown = voice_res["latency_breakdown_ms"]
         total_latency = breakdown["total_ms"]
         self.assertLessEqual(total_latency, 3000)
         self.assertTrue(voice_res["sla_compliant"])
-        print(f"[PASS] Test 07: Voice pipeline total latency {total_latency}ms <= 3000ms SLA.")
+        self.assertIn("audio_metadata", voice_res)
+        self.assertEqual(voice_res["audio_metadata"]["sample_rate_hz"], 24000)
+        self.assertIn("telemetry_span", voice_res)
+        self.assertEqual(voice_res["telemetry_span"]["status_code"], "OK")
+        print(f"[PASS] Test 07: Voice pipeline total latency {total_latency}ms <= 3000ms SLA (Audio: {voice_res['audio_metadata']['codec']}).")
 
     def test_08_outbox_sync_idempotency_simulation(self):
         """Simulate durable outbox sync with idempotent UUID deduplication."""
@@ -152,7 +160,7 @@ class TestBhashaSetuComprehensive(unittest.TestCase):
         self.assertIn("SANTHALI", cap.json())
 
         # 3. RAG Retrieve
-        r = self.client.post("/api/v1/rag/retrieve", json={"query": "पेड़ और पत्तियाँ", "grade": "GRADE_2"})
+        r = self.client.post("/api/v1/rag/retrieve", json={"query": "पेड़ और पत्तियाँ", "grade": "GRADE_2", "district": "Dumka"})
         self.assertEqual(r.status_code, 200)
         self.assertGreaterEqual(r.json()["count"], 1)
 
@@ -164,6 +172,7 @@ class TestBhashaSetuComprehensive(unittest.TestCase):
         })
         self.assertEqual(l.status_code, 200)
         self.assertEqual(l.json()["status"], "REVIEW_REQUIRED")
+        self.assertIn("audio_metadata", l.json()["adaptation"])
 
         # 5. Voice Translate
         v = self.client.post("/api/v1/voice/translate", json={
@@ -205,6 +214,21 @@ class TestBhashaSetuComprehensive(unittest.TestCase):
             mod_dir = os.path.join(backend_src, mod)
             self.assertTrue(os.path.isdir(mod_dir), f"Backend module directory {mod} missing!")
         print(f"[PASS] Test 10: All 9 Web Backend enterprise domain modules verified on disk.")
+
+    def test_11_metadata_filtering_and_provenance(self):
+        """Assert that hybrid RAG metadata filtering (district, bloom level, competency) functions accurately."""
+        # Filter by District: Dumka
+        dumka_results = rag_engine.retrieve("पेड़", district="Dumka", top_k=2)
+        self.assertGreaterEqual(len(dumka_results), 1)
+        for r in dumka_results:
+            self.assertEqual(r["chunk"]["district"], "Dumka")
+
+        # Filter by Competency Category: FLN_NUMERACY
+        math_results = rag_engine.retrieve("गिनती", competency_category="FLN_NUMERACY", top_k=2)
+        self.assertGreaterEqual(len(math_results), 1)
+        for r in math_results:
+            self.assertEqual(r["chunk"]["competency_category"], "FLN_NUMERACY")
+        print("[PASS] Test 11: Educational metadata filtering (District, Bloom Level, Competency) verified.")
 
 if __name__ == "__main__":
     print("\n=======================================================")
